@@ -430,8 +430,10 @@ const MOCK = [
 ];
 
 const STEVE = 'MHF_Steve';
-const bust = n => `https://visage.surgeplay.com/bust/160/${encodeURIComponent(n)}`;
-const full = n => `https://visage.surgeplay.com/full/512/${encodeURIComponent(n)}`;
+// на основном сайте скины раздаёт бот (кэш), на зеркале и без сервера — напрямую от Visage
+const SKIN_PROXY = !MIRROR && location.protocol !== 'file:';
+const bust = n => SKIN_PROXY ? `/skin/bust/${encodeURIComponent(n)}` : `https://visage.surgeplay.com/bust/160/${encodeURIComponent(n)}`;
+const full = n => SKIN_PROXY ? `/skin/full/${encodeURIComponent(n)}` : `https://visage.surgeplay.com/full/512/${encodeURIComponent(n)}`;
 // Visage отбивает часть запросов, когда скинов на странице много:
 // сначала повторяем с паузой, потом показываем Стива
 function skinChain(img){
@@ -486,7 +488,7 @@ function watchSkins(){
   if(skinWatch) document.querySelectorAll('img[data-skin]:not([data-ok])').forEach(i => skinWatch.observe(i));
 }
 const skinImg = (n, kind) =>
-  `<img src="${kind==='full'?full(n):bust(n)}" data-skin="${kind||'bust'}" data-name="${esc(n)}" alt="${esc(n)}" loading="lazy">`;
+  `<img src="${kind==='full'?full(n):bust(n)}" data-skin="${kind||'bust'}" data-name="${esc(n)}" alt="" loading="lazy">`;
 
 const esc = s => String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const pts = p => TIER_PTS[p.tier] || 0;
