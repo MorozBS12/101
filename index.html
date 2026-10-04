@@ -446,12 +446,14 @@ function skinChain(img){
   return [
     // бот не отдал скин — сразу берём его напрямую у Visage, а не Стива
     ...(SKIN_PROXY ? [{src: direct, wait: 0}] : []),
-    {src: direct + '?r=1', wait: 1500},
-    {src: direct + '?r=2', wait: 4000},
+    // у ников без лицензии скина нет вообще — повторять долго бессмысленно, один повтор и Стив
+    {src: direct + '?r=1', wait: 1000},
     {src: visage(STEVE, isFull), wait: 0},
     {src: `https://mc-heads.net/${isFull ? 'body' : 'head'}/${STEVE}/${isFull ? 256 : 128}`, wait: 0},
   ];
 }
+
+const BLANK = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
 
 function nextSkin(img){
   if(!img.isConnected) return;
@@ -459,6 +461,7 @@ function nextSkin(img){
   const i = +(img.dataset.fb || 0);
   if(i >= chain.length){ img.style.visibility = 'hidden'; img.dataset.ok = '1'; return; }
   img.dataset.fb = i + 1;
+  img.src = BLANK;
 
   setTimeout(() => {
     if(!img.isConnected || img.dataset.ok) return;
@@ -816,7 +819,7 @@ app.addEventListener('click', e => {
 });
 
 document.addEventListener('load', e => {
-  if(e.target.tagName === 'IMG' && e.target.dataset.skin) e.target.dataset.ok = '1';
+  if(e.target.tagName === 'IMG' && e.target.dataset.skin && e.target.src !== BLANK) e.target.dataset.ok = '1';
 }, true);
 
 addEventListener('scroll', e => {
