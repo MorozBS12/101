@@ -431,18 +431,24 @@ const MOCK = [
 
 const STEVE = 'MHF_Steve';
 // на основном сайте скины раздаёт бот (кэш), на зеркале и без сервера — напрямую от Visage
-const SKIN_PROXY = !MIRROR && location.protocol !== 'file:';
+const SKIN_PROXY = false; // скины напрямую с Visage — сайт не зависит от версии api.js
 const bust = n => SKIN_PROXY ? `/skin/bust/${encodeURIComponent(n)}` : `https://visage.surgeplay.com/bust/160/${encodeURIComponent(n)}`;
 const full = n => SKIN_PROXY ? `/skin/full/${encodeURIComponent(n)}` : `https://visage.surgeplay.com/full/512/${encodeURIComponent(n)}`;
 // Visage отбивает часть запросов, когда скинов на странице много:
 // сначала повторяем с паузой, потом показываем Стива
+const visage = (n, isFull) => isFull
+  ? `https://visage.surgeplay.com/full/512/${encodeURIComponent(n)}`
+  : `https://visage.surgeplay.com/bust/160/${encodeURIComponent(n)}`;
+
 function skinChain(img){
   const n = img.dataset.name, isFull = img.dataset.skin === 'full';
-  const own = isFull ? full(n) : bust(n);
+  const direct = visage(n, isFull);
   return [
-    {src: own + '?r=1', wait: 1500},
-    {src: own + '?r=2', wait: 4000},
-    {src: isFull ? full(STEVE) : bust(STEVE), wait: 0},
+    // бот не отдал скин — сразу берём его напрямую у Visage, а не Стива
+    ...(SKIN_PROXY ? [{src: direct, wait: 0}] : []),
+    {src: direct + '?r=1', wait: 1500},
+    {src: direct + '?r=2', wait: 4000},
+    {src: visage(STEVE, isFull), wait: 0},
     {src: `https://mc-heads.net/${isFull ? 'body' : 'head'}/${STEVE}/${isFull ? 256 : 128}`, wait: 0},
   ];
 }
