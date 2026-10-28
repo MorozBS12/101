@@ -1346,15 +1346,29 @@ function merge(data){
   return Object.values(byName);
 }
 
-async function fetchKit(kit){
+// запасная копия данных на GitHub Pages — её обновляет бот (у части провайдеров основной сервер грузится медленно)
+const MIRROR_DATA = 'https://morozbs12.github.io/101/';
+
+async function fetchJson(url, ms, opts){
   const ctrl = typeof AbortController === 'function' ? new AbortController() : null;
-  const timer = ctrl && setTimeout(() => ctrl.abort(), 15000);
+  const timer = ctrl && setTimeout(() => ctrl.abort(), ms);
   try{
-    const r = await fetch(kitUrl(kit), {credentials:'include', signal: ctrl ? ctrl.signal : undefined});
+    const r = await fetch(url, Object.assign({}, opts, {signal: ctrl ? ctrl.signal : undefined}));
     if(!r.ok) throw new Error('HTTP ' + r.status);
     return await r.json();
   }finally{
     if(timer) clearTimeout(timer);
+  }
+}
+
+async function fetchKit(kit){
+  if(MIRROR) return fetchJson(kitUrl(kit), 15000);
+  try{
+    return await fetchJson(kitUrl(kit), 7000, {credentials:'include'});
+  }catch(e){
+    // основной сервер не ответил — берём копию с GitHub
+    console.warn(kit.name + ': основной сервер не ответил, беру зеркало');
+    return fetchJson(MIRROR_DATA + kit.file + '?t=' + Date.now(), 12000);
   }
 }
 
