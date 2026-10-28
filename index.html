@@ -1031,10 +1031,11 @@ const TEAM_COLORS = ['#ff5d73', '#ffb547', '#5fa8ff', '#b48cff', '#4fd6a0', '#5f
 let team = null, teamLoading = false;
 
 async function loadTeam(){
-  if(teamLoading || MIRROR || OFFLINE) return;
+  if(teamLoading || OFFLINE) return;
   teamLoading = true;
   try{
-    const r = await fetch(API + '/api/site/team');
+    // на зеркале команда лежит файлом рядом (его выкладывает бот)
+    const r = await fetch(MIRROR ? 'team.json?t=' + Date.now() : API + '/api/site/team');
     if(r.ok){
       const data = await r.json();
       const changed = JSON.stringify(data) !== JSON.stringify(team);
@@ -1047,7 +1048,7 @@ async function loadTeam(){
 
 function teamPage(){
   const head = `<h1 class="ph">${IC.team}Команда проекта</h1>`;
-  if(MIRROR || OFFLINE) return head + nores('Список команды доступен на основном сайте.');
+  if(OFFLINE) return head + nores('Список команды доступен на основном сайте.');
   if(!team) return head + nores('Загрузка команды…');
   const servers = (team.servers || []).filter(sv => KITS.some(k => k.name === sv.name) && sv.groups.some(g => g.members.length));
   if(!servers.length) return head + nores('Список команды пока пуст.');
@@ -1097,7 +1098,7 @@ async function admApi(path, body){
 
 function adminPage(){
   const head = `<h1 class="ph">${IC.admin}Панель</h1>`;
-  if(MIRROR || OFFLINE) return head + nores('Панель работает только на основном сайте.');
+  if(MIRROR || OFFLINE) return head + nores('Панель работает только на основном сайте: <a href="https://101tiers.xyz/#/admin">101tiers.xyz</a>');
   if(!admToken){
     if(admEnabled === false) return head + nores('Панель выключена. Добавь переменную <b>ADMIN_PASSWORD</b> в Railway → Variables.');
     return head + `<div class="bind adm-login">
