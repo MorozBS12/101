@@ -657,7 +657,8 @@ function renderMenu(on){
     li('#/results', 'Results', IC.results) +
     li('#/team', 'Команда', IC.team) +
     li(DISCORD, 'Discord', IC.ds, 'ds') +
-    li('#/admin', 'Панель', IC.admin);
+    // панель не показываем в меню — вход только по прямой ссылке #/admin
+    (on === '#/admin' ? li('#/admin', 'Панель', IC.admin) : '');
 }
 
 function feedRows(list){
@@ -1098,7 +1099,7 @@ async function admApi(path, body){
 
 function adminPage(){
   const head = `<h1 class="ph">${IC.admin}Панель</h1>`;
-  if(MIRROR || OFFLINE) return head + nores('Панель работает только на основном сайте: <a href="https://101tiers.xyz/#/admin">101tiers.xyz</a>');
+  if(MIRROR || OFFLINE) return head + nores('Страница не найдена.');
   if(!admToken){
     if(admEnabled === false) return head + nores('Панель выключена. Добавь переменную <b>ADMIN_PASSWORD</b> в Railway → Variables.');
     return head + `<div class="bind adm-login">
