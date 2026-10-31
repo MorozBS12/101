@@ -295,7 +295,7 @@ main{flex:1;min-width:0;width:100%;padding:0 var(--gut) 56px}
 .profile.hasbg .fact,.profile.hasbg .ktiers>*{background:rgba(16,14,24,.6);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
 .profile.hasbg h1{text-shadow:0 2px 0 rgba(0,0,0,.5)}
 .profile.hasbg>img,.profile.hasbg>div{position:relative;z-index:2}
-.pfx{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none;image-rendering:pixelated}
+.pfx{position:absolute;inset:0;width:100%;height:100%;z-index:3;pointer-events:none;image-rendering:pixelated}
 .pglow{position:absolute;z-index:1;left:0;bottom:-10%;width:340px;height:120%;pointer-events:none;background:radial-gradient(closest-side,rgba(255,190,80,.28),transparent);animation:pglow 5s ease-in-out infinite}
 @keyframes pglow{50%{opacity:.55;transform:scale(.94)}}
 @media(max-width:560px){.pglow{width:200px}}
@@ -1353,7 +1353,15 @@ function startProfileFx(){
   cv.width = w; cv.height = h;
   stars = Array.from({length: Math.round(w * h / 520)}, () => ({x: Math.random() * w | 0, y: Math.random() * h * .4 | 0, ph: Math.random() * 6.28, sp: .6 + Math.random() * 1.6}));
   const spark = initial => ({x: Math.random() * w, y: initial ? Math.random() * h : h + 2, vy: .05 + Math.random() * .12, vx: (Math.random() - .5) * .04, life: initial ? Math.random() * 200 : 0, max: 260 + Math.random() * 320, big: Math.random() < .25});
-  sparks = Array.from({length: Math.round(w / 14)}, () => spark(true));
+  sparks = Array.from({length: Math.round(w / 22)}, () => spark(true));
+  // Частицы-завитки как у эффектов зелий в Minecraft (свой пиксельный рисунок)
+  const SPR = [
+    ['.####..', '#....#.', '#.##.#.', '#.#..#.', '#.####.', '#......', '.#####.'],
+    ['.###.', '#...#', '#.#.#', '#..#.', '.##..'],
+    ['###', '#.#', '##.']
+  ];
+  const swirl = initial => ({x: Math.random() * w, y: initial ? h * (.3 + Math.random() * .7) : h + 4, vy: .03 + Math.random() * .05, ph: Math.random() * 6.28, life: initial ? Math.random() * 300 : 0, max: 380 + Math.random() * 300, s: SPR[Math.random() < .35 ? 0 : Math.random() < .6 ? 1 : 2], flip: Math.random() < .5});
+  let swirls = Array.from({length: Math.max(5, Math.round(w / 18))}, () => swirl(true));
   let last = performance.now();
   function frame(t){
     if(!cv.isConnected) return;
@@ -1372,6 +1380,16 @@ function startProfileFx(){
       const a = k < .15 ? k / .15 : 1 - (k - .15) / .85;
       ctx.fillStyle = `rgba(255,${s.big ? 215 : 185},90,${(a * .9).toFixed(2)})`;
       ctx.fillRect(s.x | 0, s.y | 0, s.big ? 2 : 1, s.big ? 2 : 1);
+    }
+    for(let i = 0; i < swirls.length; i++){
+      const q = swirls[i];
+      q.life += dt; q.y -= q.vy * dt;
+      const k = q.life / q.max;
+      if(k >= 1 || q.y < -8){ swirls[i] = swirl(false); continue; }
+      const a = (k < .2 ? k / .2 : 1 - (k - .2) / .8);
+      const x0 = Math.round(q.x + Math.sin(q.life / 90 + q.ph) * 3), y0 = Math.round(q.y);
+      q.s.forEach((row, ry) => { for(let rx = 0; rx < row.length; rx++){ if(row[q.flip ? row.length - 1 - rx : rx] !== '#') continue;
+        ctx.fillStyle = `rgba(${ry < row.length / 2 ? '255,214,90' : '230,150,40'},${a.toFixed(2)})`; ctx.fillRect(x0 + rx, y0 + ry, 1, 1); } });
     }
     if(!still) fxRaf = requestAnimationFrame(frame);
   }
