@@ -1477,5 +1477,96 @@ setTimeout(function(){
   if(a) a.innerHTML = '<div class="nores">Сайт не смог запуститься в этом браузере. Обнови браузер или открой ссылку в Chrome.</div>';
 }, 8000);
 </script>
+<!-- Хэллоуин: паутина в углах и прыгающие тыквы (сам выключается после 3 ноября) -->
+<style>
+.hw{position:fixed;pointer-events:none;z-index:50}
+.hw-web{top:0;width:min(260px,42vw);height:min(260px,42vw);transform-origin:0 0;animation:hwSway 7s ease-in-out infinite}
+.hw-web.l{left:0}
+.hw-web.r{right:0;transform-origin:100% 0;animation-delay:-3.5s}
+.hw-web.r svg{transform:scaleX(-1)}
+.hw-web svg{width:100%;height:100%;overflow:visible}
+@keyframes hwSway{0%,100%{transform:rotate(0deg)}50%{transform:rotate(1.6deg)}}
+.hw-spider{position:absolute;left:58%;top:0;width:2px;transform-origin:top;animation:hwDrop 6s ease-in-out infinite}
+.hw-spider i{position:absolute;left:0;top:0;width:1px;background:rgba(255,255,255,.35);height:100%}
+.hw-spider svg{position:absolute;left:-9px;bottom:-14px;width:20px;height:20px}
+@keyframes hwDrop{0%,100%{height:70px}50%{height:120px}}
+.hw-pumpkins{left:0;right:0;bottom:0;height:90px}
+.hw-pk{position:absolute;bottom:0;width:34px;height:34px;animation:hwWalk linear infinite}
+.hw-pk>div{width:100%;height:100%;animation:hwHop .9s cubic-bezier(.3,0,.7,1) infinite alternate;transform-origin:bottom}
+.hw-pk svg{width:100%;height:100%;image-rendering:pixelated;filter:drop-shadow(0 0 6px rgba(255,140,30,.45))}
+@keyframes hwHop{0%{transform:translateY(0) scale(1.12,.86)}12%{transform:translateY(0) scale(1)}100%{transform:translateY(-52px) scale(.94,1.06)}}
+@keyframes hwWalk{from{left:-50px}to{left:calc(100% + 50px)}}
+.hw-off{position:fixed;right:10px;bottom:10px;z-index:51;pointer-events:auto;background:rgba(20,16,26,.75);color:#cbbfa8;border:1px solid rgba(255,255,255,.1);border-radius:8px;font:12px/1 'Golos Text',system-ui,sans-serif;padding:6px 9px;cursor:pointer}
+@media(max-width:560px){.hw-web{width:34vw;height:34vw}.hw-pk{width:26px;height:26px}.hw-pumpkins{height:70px}}
+@media(prefers-reduced-motion:reduce){.hw-web,.hw-spider,.hw-pk,.hw-pk>div{animation:none}.hw-pumpkins{display:none}}
+</style>
+<script>
+(function(){
+  try{
+    const now = new Date(), q = location.search;
+    const on = /halloween=1/.test(q) || (now.getMonth() === 9 && now.getDate() >= 25) || (now.getMonth() === 10 && now.getDate() <= 3);
+    if(!on || /halloween=0/.test(q)) return;
+    try{ if(localStorage.getItem('hwOff') === '1' && !/halloween=1/.test(q)) return; }catch(e){}
+
+    // Паутина: радиальные нити + провисающая спираль (каждый виток — дуги, прогнутые к центру)
+    function web(){
+      const R = 250, n = 9, a0 = 0, a1 = Math.PI / 2, rings = 11;
+      const ang = Array.from({length: n}, (_, i) => a0 + (a1 - a0) * (i / (n - 1)) + (i && i < n - 1 ? (Math.random() - .5) * .08 : 0));
+      const len = ang.map(() => R * (.85 + Math.random() * .2));
+      let d = '';
+      ang.forEach((a, i) => { d += `M0 0L${(Math.cos(a) * len[i]).toFixed(1)} ${(Math.sin(a) * len[i]).toFixed(1)}`; });
+      for(let k = 1; k <= rings; k++){
+        const f = Math.pow(k / rings, 1.15) * .95;
+        for(let i = 0; i < n - 1; i++){
+          const r1 = len[i] * f * (1 + (Math.random() - .5) * .04), r2 = len[i + 1] * f * (1 + (Math.random() - .5) * .04);
+          const x1 = Math.cos(ang[i]) * r1, y1 = Math.sin(ang[i]) * r1, x2 = Math.cos(ang[i + 1]) * r2, y2 = Math.sin(ang[i + 1]) * r2;
+          const mx = (x1 + x2) / 2, my = (y1 + y2) / 2, sag = .16 + Math.random() * .06; // провисание к центру
+          d += `M${x1.toFixed(1)} ${y1.toFixed(1)}Q${(mx * (1 - sag)).toFixed(1)} ${(my * (1 - sag)).toFixed(1)} ${x2.toFixed(1)} ${y2.toFixed(1)}`;
+        }
+      }
+      return `<svg viewBox="0 0 250 250" aria-hidden="true"><path d="${d}" fill="none" stroke="rgba(235,235,245,.28)" stroke-width=".7" stroke-linecap="round"/></svg>`;
+    }
+    const spider = `<div class="hw-spider"><i></i><svg viewBox="0 0 20 20"><g stroke="#16121c" stroke-width="1.3" fill="none" stroke-linecap="round"><path d="M10 9L3 4M10 10L2 9M10 11L3 15M10 12L5 18M10 9L17 4M10 10L18 9M10 11L17 15M10 12L15 18"/></g><ellipse cx="10" cy="11" rx="3.2" ry="4" fill="#16121c"/><circle cx="10" cy="6.8" r="2.2" fill="#16121c"/><circle cx="9.2" cy="6.5" r=".45" fill="#ff7a1a"/><circle cx="10.8" cy="6.5" r=".45" fill="#ff7a1a"/></svg></div>`;
+
+    // Пиксельная тыква 12x12
+    const PK = [
+      '.....gg.....',
+      '.....g......',
+      '..oooooooo..',
+      '.oOooOOooOo.',
+      'oOoooOOoooOo',
+      'oOyyoOOoyyOo',
+      'oOyyoOOoyyOo',
+      'oOooyOOyooOo',
+      'oOoyyyyyyoOo',
+      'oOooyoyyooOo',
+      '.oOooOOooOo.',
+      '..oooooooo..'];
+    const C = {g:'#4f7a28', o:'#e8791c', O:'#c45d10', y:'#ffd34a'};
+    let rects = '';
+    PK.forEach((row, y) => [...row].forEach((c, x) => { if(C[c]) rects += `<rect x="${x}" y="${y}" width="1.02" height="1.02" fill="${C[c]}"/>`; }));
+    const pumpkin = `<svg viewBox="0 0 12 12" shape-rendering="crispEdges" aria-hidden="true">${rects}</svg>`;
+
+    const box = document.createElement('div');
+    box.innerHTML = `<div class="hw hw-web l">${web()}${spider}</div><div class="hw hw-web r">${web()}</div><div class="hw hw-pumpkins"></div><button class="hw-off" type="button">Убрать тыквы</button>`;
+    document.body.append(...box.children);
+    const row = document.querySelector('.hw-pumpkins');
+    const count = innerWidth < 560 ? 3 : 5;
+    for(let i = 0; i < count; i++){
+      const p = document.createElement('div');
+      const dur = 22 + Math.random() * 16;
+      p.className = 'hw-pk';
+      p.style.animationDuration = dur + 's';
+      p.style.animationDelay = (-dur * i / count - Math.random() * 3) + 's';
+      p.innerHTML = `<div style="animation-duration:${(.75 + Math.random() * .35).toFixed(2)}s;animation-delay:-${Math.random().toFixed(2)}s">${pumpkin}</div>`;
+      row.appendChild(p);
+    }
+    document.querySelector('.hw-off').onclick = () => {
+      document.querySelectorAll('.hw,.hw-off').forEach(e => e.remove());
+      try{ localStorage.setItem('hwOff', '1'); }catch(e){}
+    };
+  }catch(e){}
+})();
+</script>
 </body>
 </html>
