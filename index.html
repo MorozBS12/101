@@ -290,6 +290,10 @@ main{flex:1;min-width:0;width:100%;padding:0 var(--gut) 56px}
   padding:26px 30px;border-radius:12px;
   background:radial-gradient(ellipse at 12% 0%,rgba(var(--c),.16),transparent 60%),var(--slate);
 }
+.profile.hasbg{background:linear-gradient(90deg,rgba(10,8,18,.15),rgba(10,8,18,.55)),var(--pbg) center bottom/cover;image-rendering:pixelated}
+.profile.hasbg>img,.profile.hasbg h1,.profile.hasbg .facts,.profile.hasbg .ktiers{image-rendering:auto}
+.profile.hasbg .fact,.profile.hasbg .ktiers>*{background:rgba(16,14,24,.6);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.profile.hasbg h1{text-shadow:0 2px 0 rgba(0,0,0,.5)}
 .profile>img{height:220px;object-fit:contain}
 .profile h1{font-family:'Pixelify Sans',system-ui,sans-serif;font-size:clamp(24px,3vw,32px);font-weight:600;word-break:break-all}
 .profile>div{flex:1 1 280px;min-width:0}
@@ -818,7 +822,7 @@ function playerPage(name){
 
   return `
   <a href="#/" class="back"><svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>Назад</a>
-  <div class="profile g${tierNum(top)}">
+  <div class="profile g${tierNum(top)}${PBG[p.name.toLowerCase()] ? ' hasbg' : ''}"${PBG[p.name.toLowerCase()] ? ` style="--pbg:url('${PBG[p.name.toLowerCase()]}')"` : ''}>
     ${skinImg(p.name, 'full')}
     <div>
       <h1>${esc(p.name)}</h1>
@@ -833,6 +837,9 @@ function playerPage(name){
   </div>
   ${sections}`;
 }
+
+// Свой фон профиля для отдельных игроков
+const PBG = { melisyn: 'bg/melisyn.png' };
 
 function notFound(msg){
   return `<h1 class="ph">Не найдено</h1>` + nores(`${msg} <a href="#/">Открыть рейтинг</a>`);
