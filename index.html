@@ -1480,29 +1480,30 @@ setTimeout(function(){
 <!-- Хэллоуин: свисающая паутина и прыгающие тыквы (сам выключается после 3 ноября) -->
 <style>
 .hw{position:fixed;pointer-events:none;z-index:50}
-.hw-web{top:-4px;transform-origin:50% 0;animation:hwSway 8s ease-in-out infinite;image-rendering:pixelated;filter:drop-shadow(0 1px 0 rgba(0,0,0,.35))}
+.hw-web{top:-4px;transform-origin:50% 0;animation:hwSway 8s ease-in-out infinite;image-rendering:pixelated;filter:drop-shadow(0 1px 1px rgba(0,0,0,.45)) drop-shadow(0 0 3px rgba(255,255,255,.15))}
 .hw-web img{display:block;width:100%;height:100%;image-rendering:pixelated}
-.hw-w1{left:-8px;width:160px;height:250px}
-.hw-w2{right:-6px;width:150px;height:245px;animation-delay:-3s;animation-duration:9s}
-.hw-w3{left:62%;width:100px;height:165px;animation-delay:-5s;animation-duration:7s}
-@keyframes hwSway{0%,100%{transform:rotate(-1.2deg)}50%{transform:rotate(1.2deg)}}
-.hw-spider{position:absolute;left:50%;top:34%;width:2px;transform-origin:top;animation:hwDrop 7s ease-in-out infinite}
+.hw-w1{left:-8px;width:150px;height:340px}
+.hw-w2{right:-6px;width:135px;height:300px;animation-delay:-3s;animation-duration:9s}
+.hw-w3{left:62%;width:92px;height:220px;animation-delay:-5s;animation-duration:7s}
+@keyframes hwSway{0%,100%{transform:rotate(-1.2deg) scaleY(1)}30%{transform:rotate(.3deg) scaleY(1.07)}50%{transform:rotate(1.2deg) scaleY(1.03)}75%{transform:rotate(-.4deg) scaleY(1.09)}}
+.hw-spider{position:absolute;left:50%;top:26%;width:2px;transform-origin:top;animation:hwDrop 7s ease-in-out infinite}
 .hw-spider i{position:absolute;left:0;top:0;width:2px;height:100%;background:rgba(236,236,244,.45)}
 .hw-spider svg{position:absolute;left:-13px;bottom:-22px;width:28px;height:28px;animation:hwWiggle 1.6s ease-in-out infinite;transform-origin:50% 0}
 @keyframes hwDrop{0%,100%{height:40px}45%,60%{height:150px}}
 @keyframes hwWiggle{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}}
-.hw-pumpkins{left:0;right:0;bottom:0;height:150px}
+.hw-pumpkins{left:0;right:0;bottom:0;height:100px}
 .hw-pk{position:absolute;bottom:4px;animation:hwWalk linear infinite}
 .hw-pk .sh{position:absolute;left:12%;right:12%;bottom:-4px;height:10px;border-radius:50%;background:radial-gradient(closest-side,rgba(0,0,0,.55),transparent);animation:hwShadow ease-in-out infinite alternate}
 .hw-pk .bd{width:100%;height:100%;transform-origin:50% 100%;animation:hwHop cubic-bezier(.33,0,.67,1) infinite alternate}
 .hw-pk svg{display:block;width:100%;height:100%;overflow:visible}
 .hw-pk .face{animation:hwFlicker 2.3s steps(1) infinite}
-@keyframes hwHop{0%{transform:translateY(0) scale(1.14,.84)}14%{transform:translateY(0) scale(1)}100%{transform:translateY(-70px) scale(.95,1.05) rotate(var(--tilt,4deg))}}
+@keyframes hwHop{0%{transform:translateY(0) scale(1.14,.84)}14%{transform:translateY(0) scale(1)}100%{transform:translateY(-44px) scale(.95,1.05) rotate(var(--tilt,4deg))}}
 @keyframes hwShadow{0%{transform:scale(1.15);opacity:1}14%{transform:scale(1)}100%{transform:scale(.45);opacity:.35}}
 @keyframes hwFlicker{0%{opacity:1}23%{opacity:.82}31%{opacity:1}58%{opacity:.9}64%{opacity:1}87%{opacity:.78}91%{opacity:1}}
 @keyframes hwWalk{from{left:-90px}to{left:calc(100% + 90px)}}
-.hw-off{position:fixed;right:10px;bottom:10px;z-index:51;pointer-events:auto;background:rgba(20,16,26,.8);color:#cbbfa8;border:1px solid rgba(255,255,255,.1);border-radius:8px;font:12px/1 'Golos Text',system-ui,sans-serif;padding:6px 9px;cursor:pointer}
-@media(max-width:560px){.hw-w1{width:96px;height:150px}.hw-w2{width:84px;height:138px}.hw-w3{display:none}.hw-pumpkins{height:110px}@keyframes hwHop{0%{transform:translateY(0) scale(1.14,.84)}14%{transform:translateY(0) scale(1)}100%{transform:translateY(-48px) scale(.95,1.05) rotate(var(--tilt,4deg))}}}
+.hw-off,.hw-snd{position:fixed;right:10px;bottom:10px;z-index:51;pointer-events:auto;background:rgba(20,16,26,.8);color:#cbbfa8;border:1px solid rgba(255,255,255,.1);border-radius:8px;font:12px/1 'Golos Text',system-ui,sans-serif;padding:6px 9px;cursor:pointer}
+@media(max-width:560px){.hw-w1{width:88px;height:200px}.hw-w2{width:76px;height:170px}.hw-w3{display:none}.hw-pumpkins{height:80px}@keyframes hwHop{0%{transform:translateY(0) scale(1.14,.84)}14%{transform:translateY(0) scale(1)}100%{transform:translateY(-30px) scale(.95,1.05) rotate(var(--tilt,4deg))}}}
+.hw-snd{right:auto;left:10px}
 @media(prefers-reduced-motion:reduce){.hw-web,.hw-spider,.hw-spider svg,.hw-pk,.hw-pk .bd,.hw-pk .sh,.hw-pk .face{animation:none}.hw-pumpkins{display:none}}
 </style>
 <script>
@@ -1513,7 +1514,7 @@ setTimeout(function(){
     if(!on || /halloween=0/.test(q)) return;
     try{ if(localStorage.getItem('hwOff') === '1' && !/halloween=1/.test(q)) return; }catch(e){}
 
-    const WEB = ['data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAyCAYAAAA0j3keAAACuElEQVR4nMVZO3YDMQgc++WANK72fK624WApc4A0ITuLAKF1XjyNX/SBQfykze3z8wsJHgD2bPKFteWee2NTBwLguUAkXfsxUQL0Ld9IkRbySlSEWMm2QMrAp7vjMOyJmHCL0BVSTMKD5YThMIshg2YCivGKDJC4sHNCpYAmHijcxMgIRQIq18mETBuZywRxDOiqglVZ3RgymGAWVBGskmFHcLKRy7yQqKKyIBPsiQnObt8DWTwPYDyhrjuMMAvfca43inlR3eGqtickWKs3mQGC2L07xj2WLA8m9MRRQX18ZFb6GLB9nSJqBEzvL24/3d6EeQtMoToiTILXCEZX8RqWxWt+jbjR9WNmWSYYiIn7MU8yJLRSqYEx+8TNCxHIGq3HqQiv1iEPna5YBBNSrDVKoX0esiBLQO5bdZllxIYjDiw7OSEU5xqjTk5an+5ukSTrLF42nGPDyNg+r2ijeSNbnlznTv38UWSnYtjd74PmBWeYEdN7d0WI3ZPNM0luHXy/Bs1vmMRXRMhORQuynKpZPGiiuCTFhHjBliiywJWCCK+VZE4RNFZPSNDr0Laug8jdXKWHC/+dBuwoGVF3tnFWYL++MXPDbcHq0MqTWTFmmwQy+G+ZyE0LoynLCArW32fAkXWK8XSVF/osmxVHTeY60ET2yfhOc13JrJkcD/EDESHF/MLOWDm5qGBOCa1g9Y02RdTtrWD550pUAqKL/Azlx4vO9YM3R3Fw5ZQUiatfddlVpNmcEVIcTfZK3elA0XxKA0njK2CCO2UhehxMCRm0ScbuRZ1vjIriK1o3qBWj9WapKd8RN91oLsXsg5UJij7lKsZrLeNSVe++OtoWvoosy/5FeYR31SGDYPJ96O1Yfbn+NdQPvJvQEKu34t9THcwek8vIYsi/IP4Nkcu418zSX/+SDAB8A7qNzBPdxP9rAAAAAElFTkSuQmCC', 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAsCAYAAABygggEAAACG0lEQVR4nN2XQY7DMAhFf6sekE1WOV9W2XCwLucAswnJDwabTNQZaZCqNA7mGbCx/Xi/v3BRpu25Xu3I8vwBVG7wJgALg5dCJ9OZb0DF+r+2RiXD6jrITaBBT2IeZ/laN6CHSqs6hJ4YPsfzZnTtDGaiZ+OJ07MoNrZevgFH2NV14JELfcvggjZt+3sENoOStGf6LAuO9EzuCaC/nEZhjzy18PKcCAcceezhFnYvawAXpztl4EoBURxh996v9BP0l1x3VmdiYc/EhzeT3cYo1B7OYbcwSwdq6Sgtp54ojlELtXGuBW10+H0BMD+23YnLpe9UHRDQeua93WsBe2zh8uHx/3lgGTATMY5NLs00g45eVxqtgvCsrtRdgyqOkqqobash2NZhT2ac6/SK8x7t4VF+1YO9+JxGk8ZvdxE8s9stIOyNT4N5rO6bduDCLwxW+m9h8aGanB6nyEJb8bzx2IyLa+etsrJ0RiU2DLUgLoEZUBGXRUXHcw9maLTtAeeJ1VuCXThXLob2DEUVbUFSGrMBjrZF9jqa2Tyg7PvwIKADuGRG0Hrr9Zp+1YPA6ESJbWDpUQcujVfvTua9H8Dli9yVg4A64wyLJlxX7CAw6lD1qHr2whPHxBnl79Z9OAILGb8regVsoblzDWUZVbMdXIFqEVo5UJzAvy6fAOtfgUvyr8DZPv5xMDAuSB8B8y3yFnhBwQMSK63aU/oG6ueaHNrE/cUAAAAASUVORK5CYII=', 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAmCAYAAADa8osYAAAByElEQVR4nLVXO7LDMAjcZN4BaVz5fK7c6GAp3wFe8bQyQqBPnOyMR7aCWIQAkcfr9YtFbHk8VxY983goBSMSyc8SSLTnxRHhln8DgJSfFeMKEcmsYq1sR+0uyo+MEwB4OGd0ZIujM/DOiHOSx2TeT48oUjZrCGV2NeKnIyz5SWae35tDxmDZzXxIRAVivqmMc/psKGsN6xIR3L4lswZtikDLFVIddT0yKvMQnWclP9qRhjiKBP3AKPMrRNqNRBoYVohmXEfMVIEQ0Y5sTUsdHZTryVQ70mUH+HcVHyA+By0jaN0L4NoRs71JNIUDdQSeqEP/VO8NGXeUHIttMnpGJPhXRpMS1nUemIyb+hbUVT2q4E3UnYFlOhl1yUmo3cX7LMQovAW1S6ncU9o73y6RjBavICLSRXIFbsRZIq1Y3iAhvFLVVAZ7cb3VWsEJe0skqHem75sVNAHj1breBacNmkG57vUZCd4LAA8sV8UgGwyCm9cB6ojlWIh0OblDFgbP0/lh1CNE6DUxw3ZrplkMezlcCbzPtFu2wSf0XFSq6JVjpjnRVVovnqmDzKfE3numdboFW1TlGyTAFQynGT+O6G/Lx7HSQN7CH+LvheuKzqIjAAAAAElFTkSuQmCC'];
+    const WEB = ['data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACIAAABACAYAAAB/e6WTAAADDElEQVR4nO1Z243jMAzkBtdCinQT+VATKVJFaH/MZEQNRSryLg64G8BI4rXoIcWXuF+tNdlEFZH7rpCbc7+c1wqZLLjs1hq7SmutOn+zV4XPeq715FVPrmcREZHnoqZ3eW9RhavA3138SQhf9YHHeVmoHKrczCIq7Cm+v2T9KFTmy4kaXFhE5ABSiEfiJQWe1d+DxaKtUahJmclnmFmylxVEgpgoYB4/i65KZNA1no/YLcD7qGUxn3h/ycnZ1kQOeMD3x/n7YdYd4iuTJnLIXBMvpNEZIxJq2befkAxYGvcP/F3Md7beW0v9xFoksgZqr4kJtwrX63Z5kdZbxTD0tPM0xDWszpQ21hl2vRJaNUwZDvPMAZ+exmhBBVrpnewc7b2KHGma8Q2al27A2NPMA3veFjTrI67PzIqehyqjUz/h85C1pmqZyCHv/MGK390QjHqZLt9kiegitAJLahiSSiwFJOL1HZ5m1iq61kYXdmkILQ0DEYZ6CrMOpi/Doqedme3C7uZZCiRiX6amt/d1m7AlZJGALw77GGsR1VQtwdCZ1AHzj+kaS0T31CORqawoiyFsnrU3ZT6hyFjDPm9BO3kkEpEQyVtD/cNGosoeHHjWPLMyzhy3E0ie06bbyuqUUiKZlGy3JRsVXn7SbRv6EXbeLaZKljZW6swZmfUq3b3suSaj+Qyhb2VqTZH9+UfYZmSIRIVrJa+gc3frIiLL55MJplbJWGTmF8sN0Ik+YgIimXS+2l66I45M1LC+EwWvAM9DUyIo2Palds5hSWVBjyBeP8K2xRtJrYLK8LYme/R0Ba9CLcJmHj8F1tvSQ/hTrssdloBraRa+K81PJnx1eiQeCY/IKthW6suRwFQ5nAZ8MtzF/taOQGcvHi1ETvXRVCA7UYzWdWtvDnPvdKbAff8EY0BM5hjMWtZqK9abzVuG0dWWsJ21V0TNJUAi2/8O24E96f0WNMu+HP6v3JrfhM5RXu7wz1tkwH8iFrtELmkTRfaIXJp3doh8NOq+mghtgLdgyv1qc7NTfbvrGwDX74DQTTbVAAAAAElFTkSuQmCC', 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAA6CAYAAACnDemCAAACaklEQVR4nO1Yy5HDMAh9yWwLLlJN5KAmXKSK0F6MjREIcJzdS95MJkr0eSA+Qnr03pFE3b5f2Ykczwuk5R3CK8Sk6foGXwXQAAC9d/Te2/atferWX8V/1njr0zjPg9m4GVKuGO3ZACwJTWn8MU+RyNNG2wFv7LCzUuMFc6+t2/9yrIaCwx9orV1jjZjawOhIwwIGuPAkLBccP8ZETmjFazX6QnFuEdPEilFi2c9B2ztomCHmizexYGH9hIjdd0QTyIp5xsqGl6sxQdtqapcEaaG1MilTbjO1ZylU8wMAcY25dhDtgtEM/kGiZBXKNpSdZI5uk34re8m50BbUyLhwktw7YOTv2nvfbUy2WmAHPoUU2PeytUMhtGFwrlmm4aQ0lhOWIPlueyL2pKbk8cI5eVB7QbYy0Y4sxSHkuDrpmxULe781SZLOqg9Jps05ORZ3LsseMiNF7Dgz2+FHE8k1LbXQ0TTUKpTTXK4x91rpKGbqMzR0nU1uNZ2/mRKWe7cnkEkMsBPEWGwmgLZWiJg7lFVhaFpY2lFJOyB6OkmhJAlVnuH7lCSOHugeAa+1VK35Vmv2mHlzBoNvWOF0dXE/cWzIVCCeYGRnlUgiUnNZcZrFSfBssefZW7tZquB3J7Pqx7lujjibT+6cn9aR6V3A3XHZN5CrGHYpQpw9NEKIFnuZp6VQ1UnE3s0+g5CQvK6+E+56TxzZxnr1+QieGG8Hd0N/DQzE3JXHNF4sqs9YXjhdPRK5g8knJwD5R9QM+FVnKDA84neehqc+81cp80v8Jb4V04j4tMapS9udpOajzL/ZOJLsM4Ve+ID5BQVqQ7hn1GV5AAAAAElFTkSuQmCC', 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAwCAYAAAALiLqjAAAB1ElEQVR4nLVY25GEMAzTMtsCRdIEH2mCIimC+zgMjvArzJ1mmIU8LCw7idnPcRwYQDt/1+qEzyDBfv7O1QnfQeObui+RTGpCwy0BG25kcMbtTYlAJi/nRLnEsKX5rMZYaEAvkRhZUNdYxrVzHmP1gszZYr2l5RWPW6Mg6zdiotW4X/CbBCtUEkQEM+Js0aTaeIeJGxwSD02NM1FZBxv6NaANA9mqPo7DuprxvNPFY8z5mURVNOc+JWjwY7CwMQsegaxowMkO9PsS4x5v6Mf6iv6sL7dZ7Q8PvLzfnDaW6CHZpDo849Yeo/viQ8hyi9xtQVv6HBGw9qx1FKMHgTWRjUft7IEbZA7iCOw14TBH20DmWcmDKHM8WGlrerAnXngeSF85BvrUGvEi9MBLw6oHj3596EdVm16tWdHV90f6OfleGdM8Dyr1UMWDSwkO8mhQGQ0caHIrc7+Spl1isAflotYAVx4Abon0Xv6GRKQpF172svexWMYjgqjoZVhZde0C2VaRkZi6a2R1kZBYMXF1HyEQEqlPxZtd9XlYAOzV0nHF8xut9Ck78pUpRFV0HyBa4xEjKf6quk4JZhQy4g1G/0oYxluJytvIv8cg2/ujYzMqzq7rB+mjtbGWEo3nAAAAAElFTkSuQmCC'];
     const spider = `<div class="hw-spider"><i></i><svg viewBox="0 0 28 28" aria-hidden="true"><g stroke="#120e16" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12L7 7L2 9M12 14L5 12L1 15M12 16L5 18L2 23M13 17L8 22L7 27M16 12L21 7L26 9M16 14L23 12L27 15M16 16L23 18L26 23M15 17L20 22L21 27"/></g><ellipse cx="14" cy="17" rx="4.6" ry="5.6" fill="#120e16"/><ellipse cx="14" cy="10.5" rx="3.2" ry="3" fill="#1c1622"/><circle cx="12.8" cy="10" r=".8" fill="#ff8a2a"/><circle cx="15.2" cy="10" r=".8" fill="#ff8a2a"/><ellipse cx="12.6" cy="15" rx="1.2" ry="2" fill="#fff" opacity=".12"/></svg></div>`;
 
     let uid = 0;
@@ -1541,13 +1542,13 @@ setTimeout(function(){
     }
 
     const box = document.createElement('div');
-    box.innerHTML = `<div class="hw hw-web hw-w1"><img src="${WEB[0]}" alt="">${spider}</div><div class="hw hw-web hw-w2"><img src="${WEB[1]}" alt=""></div><div class="hw hw-web hw-w3"><img src="${WEB[2]}" alt=""></div><div class="hw hw-pumpkins"></div><button class="hw-off" type="button">Убрать тыквы</button>`;
+    box.innerHTML = `<div class="hw hw-web hw-w1"><img src="${WEB[0]}" alt="">${spider}</div><div class="hw hw-web hw-w2"><img src="${WEB[1]}" alt=""></div><div class="hw hw-web hw-w3"><img src="${WEB[2]}" alt=""></div><div class="hw hw-pumpkins"></div><button class="hw-off" type="button">Убрать тыквы</button><button class="hw-snd" type="button"></button>`;
     document.body.append(...box.children);
 
     const row = document.querySelector('.hw-pumpkins');
     const small = innerWidth < 560, count = small ? 3 : 4;
     for(let i = 0; i < count; i++){
-      const size = small ? 40 + Math.random() * 12 : 58 + Math.random() * 18;
+      const size = small ? 26 + Math.random() * 6 : 34 + Math.random() * 10;
       const walk = (small ? 16 : 26) + Math.random() * 12;
       const hop = (.62 + Math.random() * .25).toFixed(2), hd = (-Math.random()).toFixed(2);
       const p = document.createElement('div');
@@ -1556,8 +1557,78 @@ setTimeout(function(){
       p.innerHTML = `<div class="sh" style="animation-duration:${hop}s;animation-delay:${hd}s"></div><div class="bd" style="--tilt:${(Math.random() * 10 - 5).toFixed(1)}deg;animation-duration:${hop}s;animation-delay:${hd}s">${pumpkin()}</div>`;
       row.appendChild(p);
     }
+    // Звук: ветер, низкий гул, иногда сова или скрип. Браузер даёт включить звук только после первого касания или клика.
+    const hwSound = (() => {
+      let ctx = null, master = null, timer = 0, on = true, started = false;
+      try{ on = localStorage.getItem('hwSound') !== '0'; }catch(e){}
+      const btn = document.querySelector('.hw-snd');
+      const label = () => { btn.textContent = on ? 'Звук: вкл' : 'Звук: выкл'; };
+      label();
+      function build(){
+        const AC = window.AudioContext || window.webkitAudioContext;
+        if(!AC) return false;
+        ctx = new AC();
+        master = ctx.createGain(); master.gain.value = 0; master.connect(ctx.destination);
+        // ветер: «коричневый» шум через полосовой фильтр, который медленно гуляет
+        const len = ctx.sampleRate * 4, buf = ctx.createBuffer(1, len, ctx.sampleRate), d = buf.getChannelData(0);
+        let last = 0;
+        for(let i = 0; i < len; i++){ last = (last + .02 * (Math.random() * 2 - 1)) / 1.02; d[i] = last * 3.5; }
+        const src = ctx.createBufferSource(); src.buffer = buf; src.loop = true;
+        const bp = ctx.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = 520; bp.Q.value = .9;
+        const lfo = ctx.createOscillator(), lg = ctx.createGain(); lfo.frequency.value = .07; lg.gain.value = 320; lfo.connect(lg); lg.connect(bp.frequency);
+        const wg = ctx.createGain(); wg.gain.value = .55;
+        const lfo2 = ctx.createOscillator(), lg2 = ctx.createGain(); lfo2.frequency.value = .045; lg2.gain.value = .3; lfo2.connect(lg2); lg2.connect(wg.gain);
+        src.connect(bp); bp.connect(wg); wg.connect(master);
+        // низкий тревожный гул
+        [[55, .05], [55.7, .05], [82.4, .02]].forEach(([f, v]) => { const o = ctx.createOscillator(), g = ctx.createGain(); o.frequency.value = f; g.gain.value = v; o.connect(g); g.connect(master); o.start(); });
+        src.start(); lfo.start(); lfo2.start();
+        return true;
+      }
+      function owl(){
+        const t = ctx.currentTime + .05;
+        [[0, 430, 390, .38], [.6, 405, 355, .75]].forEach(([dt, f1, f2, dur]) => {
+          const o = ctx.createOscillator(), g = ctx.createGain(), vib = ctx.createOscillator(), vg = ctx.createGain();
+          o.frequency.setValueAtTime(f1, t + dt); o.frequency.exponentialRampToValueAtTime(f2, t + dt + dur);
+          vib.frequency.value = 6; vg.gain.value = 5; vib.connect(vg); vg.connect(o.frequency);
+          g.gain.setValueAtTime(0, t + dt); g.gain.linearRampToValueAtTime(.09, t + dt + .07); g.gain.exponentialRampToValueAtTime(.001, t + dt + dur + .05);
+          o.connect(g); g.connect(master); o.start(t + dt); vib.start(t + dt); o.stop(t + dt + dur + .1); vib.stop(t + dt + dur + .1);
+        });
+      }
+      function creak(){
+        const t = ctx.currentTime + .05;
+        const o = ctx.createOscillator(); o.type = 'sawtooth';
+        o.frequency.setValueAtTime(85, t); o.frequency.linearRampToValueAtTime(150, t + .55); o.frequency.linearRampToValueAtTime(70, t + 1.2);
+        const f = ctx.createBiquadFilter(); f.type = 'bandpass'; f.frequency.value = 950; f.Q.value = 5;
+        const am = ctx.createGain(); am.gain.value = .5;
+        const pulse = ctx.createOscillator(), pg = ctx.createGain(); pulse.type = 'square'; pulse.frequency.value = 24; pg.gain.value = .5; pulse.connect(pg); pg.connect(am.gain);
+        const g = ctx.createGain(); g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.07, t + .2); g.gain.linearRampToValueAtTime(0, t + 1.25);
+        o.connect(f); f.connect(am); am.connect(g); g.connect(master);
+        o.start(t); pulse.start(t); o.stop(t + 1.3); pulse.stop(t + 1.3);
+      }
+      function schedule(){
+        clearTimeout(timer);
+        timer = setTimeout(() => { if(on && ctx && ctx.state === 'running') (Math.random() < .55 ? owl : creak)(); schedule(); }, 9000 + Math.random() * 14000);
+      }
+      function fade(v){ if(master){ const t = ctx.currentTime; master.gain.cancelScheduledValues(t); master.gain.setValueAtTime(master.gain.value, t); master.gain.linearRampToValueAtTime(v, t + (v ? 2.5 : .4)); } }
+      function start(){
+        if(!ctx && !build()) return;
+        ctx.resume(); fade(.4); schedule(); started = true;
+      }
+      function stop(){ clearTimeout(timer); fade(0); if(ctx) setTimeout(() => { if(!on && ctx) ctx.suspend(); }, 500); }
+      const first = () => { removeEventListener('pointerdown', first, true); removeEventListener('keydown', first, true); if(on && !started) start(); };
+      addEventListener('pointerdown', first, true); addEventListener('keydown', first, true);
+      btn.onclick = () => {
+        on = !on; label();
+        try{ localStorage.setItem('hwSound', on ? '1' : '0'); }catch(e){}
+        on ? start() : stop();
+      };
+      document.addEventListener('visibilitychange', () => { if(!ctx) return; if(document.hidden) ctx.suspend(); else if(on && started) ctx.resume(); });
+      return { stop(){ on = false; stop(); } };
+    })();
+
     document.querySelector('.hw-off').onclick = () => {
-      document.querySelectorAll('.hw,.hw-off').forEach(e => e.remove());
+      hwSound.stop();
+      document.querySelectorAll('.hw,.hw-off,.hw-snd').forEach(e => e.remove());
       try{ localStorage.setItem('hwOff', '1'); }catch(e){}
     };
   }catch(e){}
