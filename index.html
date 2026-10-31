@@ -290,16 +290,19 @@ main{flex:1;min-width:0;width:100%;padding:0 var(--gut) 56px}
   padding:26px 30px;border-radius:12px;
   background:radial-gradient(ellipse at 12% 0%,rgba(var(--c),.16),transparent 60%),var(--slate);
 }
-.profile.hasbg{position:relative;overflow:hidden;isolation:isolate;background:linear-gradient(90deg,rgba(10,8,18,.15),rgba(10,8,18,.55)),var(--pbg) center bottom/cover;image-rendering:pixelated}
+.profile.hasbg{position:relative;overflow:hidden;isolation:isolate;background:linear-gradient(90deg,rgba(6,6,12,.35),rgba(6,6,12,.1) 45%,rgba(6,6,12,.3)),var(--pbg) center 80%/cover;image-rendering:pixelated;--glow:255,170,60;--fog:255,120,40}
+.profile.th-grave{--glow:90,230,200;--fog:80,200,170}
 .profile.hasbg>img,.profile.hasbg h1,.profile.hasbg .facts,.profile.hasbg .ktiers{image-rendering:auto}
 .profile.hasbg .fact,.profile.hasbg .ktiers>*{background:rgba(16,14,24,.6);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
 .profile.hasbg h1{text-shadow:0 2px 0 rgba(0,0,0,.5)}
 .profile.hasbg>img,.profile.hasbg>div{position:relative;z-index:2}
 .pfx{position:absolute;inset:0;width:100%;height:100%;z-index:3;pointer-events:none;image-rendering:pixelated}
-.pglow{position:absolute;z-index:1;left:0;bottom:-10%;width:340px;height:120%;pointer-events:none;background:radial-gradient(closest-side,rgba(255,190,80,.28),transparent);animation:pglow 5s ease-in-out infinite}
+.pglow{position:absolute;z-index:1;left:0;bottom:-10%;width:340px;height:120%;pointer-events:none;background:radial-gradient(closest-side,rgba(var(--glow),.26),transparent);animation:pglow 5s ease-in-out infinite}
+.pfog{position:absolute;z-index:1;left:-50%;right:-50%;bottom:-20px;height:55%;pointer-events:none;opacity:.55;background:radial-gradient(40% 60% at 20% 80%,rgba(var(--fog),.28),transparent 70%),radial-gradient(35% 50% at 60% 90%,rgba(var(--fog),.22),transparent 70%),radial-gradient(30% 55% at 85% 75%,rgba(var(--fog),.2),transparent 70%);animation:pfog 26s linear infinite alternate}
+@keyframes pfog{to{transform:translateX(18%)}}
 @keyframes pglow{50%{opacity:.55;transform:scale(.94)}}
 @media(max-width:560px){.pglow{width:200px}}
-@media(prefers-reduced-motion:reduce){.pglow{animation:none}}
+@media(prefers-reduced-motion:reduce){.pglow,.pfog{animation:none}}
 .profile>img{height:220px;object-fit:contain}
 .profile h1{font-family:'Pixelify Sans',system-ui,sans-serif;font-size:clamp(24px,3vw,32px);font-weight:600;word-break:break-all}
 .profile>div{flex:1 1 280px;min-width:0}
@@ -800,6 +803,7 @@ function playerPage(name){
 
   const rank = sortByPts(players.slice()).findIndex(x => x.name === p.name) + 1;
   const top = best(p) || 'LT5';
+  const th = PBG[p.name.toLowerCase()];
 
   // плитки режимов: значок в кружке цвета тира, тир и очки
   const kitTiles = KITS.map(k => {
@@ -828,8 +832,8 @@ function playerPage(name){
 
   return `
   <a href="#/" class="back"><svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>Назад</a>
-  <div class="profile g${tierNum(top)}${PBG[p.name.toLowerCase()] ? ' hasbg' : ''}"${PBG[p.name.toLowerCase()] ? ` style="--pbg:url('${PBG[p.name.toLowerCase()]}')"` : ''}>
-    ${PBG[p.name.toLowerCase()] ? '<canvas class="pfx" aria-hidden="true"></canvas><span class="pglow" aria-hidden="true"></span>' : ''}
+  <div class="profile g${tierNum(top)}${th ? ' hasbg th-' + th.fx : ''}"${th ? ` style="--pbg:url('${th.bg}')"` : ''}>
+    ${th ? `<span class="pfog" aria-hidden="true"></span><canvas class="pfx" data-fx="${th.fx}" aria-hidden="true"></canvas><span class="pglow" aria-hidden="true"></span>` : ''}
     ${skinImg(p.name, 'full')}
     <div>
       <h1>${esc(p.name)}</h1>
@@ -846,7 +850,10 @@ function playerPage(name){
 }
 
 // Свой фон профиля для отдельных игроков
-const PBG = { melisyn: 'bg/melisyn.png' };
+const PBG = {
+  melisyn: {bg: 'bg/melisyn.png', fx: 'pumpkin'}, // тыквенное поле под луной
+  morozbs: {bg: 'bg/morozbs.png', fx: 'grave'}    // кладбище в зелёном тумане
+};
 
 function notFound(msg){
   return `<h1 class="ph">Не найдено</h1>` + nores(`${msg} <a href="#/">Открыть рейтинг</a>`);
@@ -1338,39 +1345,58 @@ function router(){
   if(seg === 'admin') wireAdmin();
 }
 
-// Живой фон профиля: мерцающие звёзды и поднимающиеся искры (пиксельные)
+// Живой фон профиля: звёзды, частицы-завитки (как эффекты зелий в Minecraft), искры/души и летучие мыши
+const FX = {
+  pumpkin: {swirl: [['255,196,80', '232,120,24'], ['255,140,40', '200,80,10']], spark: '255,190,90', star: '255,240,215', bats: 3},
+  grave:   {swirl: [['140,255,210', '60,200,160'], ['190,140,255', '130,80,220']], spark: '150,255,225', star: '215,255,245', bats: 2}
+};
 let fxRaf = 0;
 function startProfileFx(){
   cancelAnimationFrame(fxRaf);
   const cv = document.querySelector('.pfx');
   if(!cv) return;
+  const T = FX[cv.dataset.fx] || FX.pumpkin;
   const still = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
   const ctx = cv.getContext('2d');
   const P = 3; // размер «пикселя»
-  let w = 0, h = 0, stars = [], sparks = [];
   const r = cv.getBoundingClientRect();
-  w = Math.max(1, Math.round(r.width / P)); h = Math.max(1, Math.round(r.height / P));
+  const w = Math.max(1, Math.round(r.width / P)), h = Math.max(1, Math.round(r.height / P));
   cv.width = w; cv.height = h;
-  stars = Array.from({length: Math.round(w * h / 520)}, () => ({x: Math.random() * w | 0, y: Math.random() * h * .4 | 0, ph: Math.random() * 6.28, sp: .6 + Math.random() * 1.6}));
-  const spark = initial => ({x: Math.random() * w, y: initial ? Math.random() * h : h + 2, vy: .05 + Math.random() * .12, vx: (Math.random() - .5) * .04, life: initial ? Math.random() * 200 : 0, max: 260 + Math.random() * 320, big: Math.random() < .25});
-  sparks = Array.from({length: Math.round(w / 22)}, () => spark(true));
-  // Частицы-завитки как у эффектов зелий в Minecraft (свой пиксельный рисунок)
+  const rnd = (a, b) => a + Math.random() * (b - a);
+  const stars = Array.from({length: Math.round(w * h / 520)}, () => ({x: Math.random() * w | 0, y: Math.random() * h * .35 | 0, ph: rnd(0, 6.28), sp: rnd(.6, 2.2)}));
+  const spark = initial => ({x: rnd(0, w), y: initial ? rnd(0, h) : h + 2, vy: rnd(.04, .14), vx: rnd(-.02, .02), life: initial ? rnd(0, 200) : 0, max: rnd(260, 560), big: Math.random() < .25});
+  const sparks = Array.from({length: Math.round(w / 20)}, () => spark(true));
   const SPR = [
     ['.####..', '#....#.', '#.##.#.', '#.#..#.', '#.####.', '#......', '.#####.'],
     ['.###.', '#...#', '#.#.#', '#..#.', '.##..'],
     ['###', '#.#', '##.']
   ];
-  const swirl = initial => ({x: Math.random() * w, y: initial ? h * (.3 + Math.random() * .7) : h + 4, vy: .03 + Math.random() * .05, ph: Math.random() * 6.28, life: initial ? Math.random() * 300 : 0, max: 380 + Math.random() * 300, s: SPR[Math.random() < .35 ? 0 : Math.random() < .6 ? 1 : 2], flip: Math.random() < .5});
-  let swirls = Array.from({length: Math.max(5, Math.round(w / 18))}, () => swirl(true));
+  const swirl = initial => ({x: rnd(0, w), y: initial ? h * rnd(.25, 1) : h + 4, vy: rnd(.03, .08), ph: rnd(0, 6.28), life: initial ? rnd(0, 300) : 0, max: rnd(380, 680), s: SPR[Math.random() < .3 ? 0 : Math.random() < .6 ? 1 : 2], flip: Math.random() < .5, c: T.swirl[Math.random() * T.swirl.length | 0]});
+  const swirls = Array.from({length: Math.max(5, Math.round(w / 18))}, () => swirl(true));
+  // Летучая мышь: два кадра (крылья вверх / вниз)
+  const BAT = [['#.....#', '##.#.##', '.#####.', '...#...'], ['.......', '..###..', '.#####.', '#..#..#']];
+  const bat = initial => { const dir = Math.random() < .5 ? 1 : -1; return {x: initial ? rnd(0, w) : (dir > 0 ? -8 : w + 8), y: rnd(h * .08, h * .45), dir, v: rnd(.18, .32), ph: rnd(0, 6.28), fl: rnd(.18, .26)}; };
+  const bats = Array.from({length: T.bats}, () => bat(true));
+  const sprite = (rows, x0, y0, flip, col) => {
+    ctx.fillStyle = col;
+    rows.forEach((row, ry) => { for(let rx = 0; rx < row.length; rx++){ if(row[flip ? row.length - 1 - rx : rx] === '#') ctx.fillRect(x0 + rx, y0 + ry, 1, 1); } });
+  };
   let last = performance.now();
   function frame(t){
     if(!cv.isConnected) return;
     const dt = Math.min(3, (t - last) / 16.7); last = t;
     ctx.clearRect(0, 0, w, h);
     for(const s of stars){
-      const a = .3 + .7 * Math.max(0, Math.sin(t / 1000 * s.sp + s.ph));
-      ctx.fillStyle = `rgba(255,244,220,${a.toFixed(2)})`;
+      const a = .25 + .75 * Math.max(0, Math.sin(t / 1000 * s.sp + s.ph));
+      ctx.fillStyle = `rgba(${T.star},${a.toFixed(2)})`;
       ctx.fillRect(s.x, s.y, 1, 1);
+    }
+    for(let i = 0; i < bats.length; i++){
+      const b = bats[i];
+      b.x += b.v * b.dir * dt;
+      if(b.x < -12 || b.x > w + 12){ bats[i] = bat(false); continue; }
+      const y = Math.round(b.y + Math.sin(t / 700 + b.ph) * 3);
+      sprite(BAT[Math.floor(t * b.fl / 60) % 2], Math.round(b.x), y, b.dir < 0, 'rgba(8,5,12,.92)');
     }
     for(let i = 0; i < sparks.length; i++){
       const s = sparks[i];
@@ -1378,7 +1404,7 @@ function startProfileFx(){
       const k = s.life / s.max;
       if(k >= 1 || s.y < -2){ sparks[i] = spark(false); continue; }
       const a = k < .15 ? k / .15 : 1 - (k - .15) / .85;
-      ctx.fillStyle = `rgba(255,${s.big ? 215 : 185},90,${(a * .9).toFixed(2)})`;
+      ctx.fillStyle = `rgba(${T.spark},${(a * .85).toFixed(2)})`;
       ctx.fillRect(s.x | 0, s.y | 0, s.big ? 2 : 1, s.big ? 2 : 1);
     }
     for(let i = 0; i < swirls.length; i++){
@@ -1386,10 +1412,9 @@ function startProfileFx(){
       q.life += dt; q.y -= q.vy * dt;
       const k = q.life / q.max;
       if(k >= 1 || q.y < -8){ swirls[i] = swirl(false); continue; }
-      const a = (k < .2 ? k / .2 : 1 - (k - .2) / .8);
-      const x0 = Math.round(q.x + Math.sin(q.life / 90 + q.ph) * 3), y0 = Math.round(q.y);
-      q.s.forEach((row, ry) => { for(let rx = 0; rx < row.length; rx++){ if(row[q.flip ? row.length - 1 - rx : rx] !== '#') continue;
-        ctx.fillStyle = `rgba(${ry < row.length / 2 ? '255,214,90' : '230,150,40'},${a.toFixed(2)})`; ctx.fillRect(x0 + rx, y0 + ry, 1, 1); } });
+      const a = (k < .2 ? k / .2 : 1 - (k - .2) / .8).toFixed(2);
+      const x0 = Math.round(q.x + Math.sin(q.life / 90 + q.ph) * 3), y0 = Math.round(q.y), half = q.s.length / 2;
+      q.s.forEach((row, ry) => { ctx.fillStyle = `rgba(${q.c[ry < half ? 0 : 1]},${a})`; for(let rx = 0; rx < row.length; rx++){ if(row[q.flip ? row.length - 1 - rx : rx] === '#') ctx.fillRect(x0 + rx, y0 + ry, 1, 1); } });
     }
     if(!still) fxRaf = requestAnimationFrame(frame);
   }
