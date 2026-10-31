@@ -1477,28 +1477,33 @@ setTimeout(function(){
   if(a) a.innerHTML = '<div class="nores">Сайт не смог запуститься в этом браузере. Обнови браузер или открой ссылку в Chrome.</div>';
 }, 8000);
 </script>
-<!-- Хэллоуин: паутина в углах и прыгающие тыквы (сам выключается после 3 ноября) -->
+<!-- Хэллоуин: свисающая паутина и прыгающие тыквы (сам выключается после 3 ноября) -->
 <style>
 .hw{position:fixed;pointer-events:none;z-index:50}
-.hw-web{top:0;width:min(260px,42vw);height:min(260px,42vw);transform-origin:0 0;animation:hwSway 7s ease-in-out infinite}
-.hw-web.l{left:0}
-.hw-web.r{right:0;transform-origin:100% 0;animation-delay:-3.5s}
-.hw-web.r svg{transform:scaleX(-1)}
-.hw-web svg{width:100%;height:100%;overflow:visible}
-@keyframes hwSway{0%,100%{transform:rotate(0deg)}50%{transform:rotate(1.6deg)}}
-.hw-spider{position:absolute;left:58%;top:0;width:2px;transform-origin:top;animation:hwDrop 6s ease-in-out infinite}
-.hw-spider i{position:absolute;left:0;top:0;width:1px;background:rgba(255,255,255,.35);height:100%}
-.hw-spider svg{position:absolute;left:-9px;bottom:-14px;width:20px;height:20px}
-@keyframes hwDrop{0%,100%{height:70px}50%{height:120px}}
-.hw-pumpkins{left:0;right:0;bottom:0;height:90px}
-.hw-pk{position:absolute;bottom:0;width:34px;height:34px;animation:hwWalk linear infinite}
-.hw-pk>div{width:100%;height:100%;animation:hwHop .9s cubic-bezier(.3,0,.7,1) infinite alternate;transform-origin:bottom}
-.hw-pk svg{width:100%;height:100%;image-rendering:pixelated;filter:drop-shadow(0 0 6px rgba(255,140,30,.45))}
-@keyframes hwHop{0%{transform:translateY(0) scale(1.12,.86)}12%{transform:translateY(0) scale(1)}100%{transform:translateY(-52px) scale(.94,1.06)}}
-@keyframes hwWalk{from{left:-50px}to{left:calc(100% + 50px)}}
-.hw-off{position:fixed;right:10px;bottom:10px;z-index:51;pointer-events:auto;background:rgba(20,16,26,.75);color:#cbbfa8;border:1px solid rgba(255,255,255,.1);border-radius:8px;font:12px/1 'Golos Text',system-ui,sans-serif;padding:6px 9px;cursor:pointer}
-@media(max-width:560px){.hw-web{width:34vw;height:34vw}.hw-pk{width:26px;height:26px}.hw-pumpkins{height:70px}}
-@media(prefers-reduced-motion:reduce){.hw-web,.hw-spider,.hw-pk,.hw-pk>div{animation:none}.hw-pumpkins{display:none}}
+.hw-web{top:-4px;transform-origin:50% 0;animation:hwSway 8s ease-in-out infinite;image-rendering:pixelated;filter:drop-shadow(0 1px 0 rgba(0,0,0,.35))}
+.hw-web img{display:block;width:100%;height:100%;image-rendering:pixelated}
+.hw-w1{left:-8px;width:160px;height:250px}
+.hw-w2{right:-6px;width:150px;height:245px;animation-delay:-3s;animation-duration:9s}
+.hw-w3{left:62%;width:100px;height:165px;animation-delay:-5s;animation-duration:7s}
+@keyframes hwSway{0%,100%{transform:rotate(-1.2deg)}50%{transform:rotate(1.2deg)}}
+.hw-spider{position:absolute;left:50%;top:34%;width:2px;transform-origin:top;animation:hwDrop 7s ease-in-out infinite}
+.hw-spider i{position:absolute;left:0;top:0;width:2px;height:100%;background:rgba(236,236,244,.45)}
+.hw-spider svg{position:absolute;left:-13px;bottom:-22px;width:28px;height:28px;animation:hwWiggle 1.6s ease-in-out infinite;transform-origin:50% 0}
+@keyframes hwDrop{0%,100%{height:40px}45%,60%{height:150px}}
+@keyframes hwWiggle{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}}
+.hw-pumpkins{left:0;right:0;bottom:0;height:150px}
+.hw-pk{position:absolute;bottom:4px;animation:hwWalk linear infinite}
+.hw-pk .sh{position:absolute;left:12%;right:12%;bottom:-4px;height:10px;border-radius:50%;background:radial-gradient(closest-side,rgba(0,0,0,.55),transparent);animation:hwShadow ease-in-out infinite alternate}
+.hw-pk .bd{width:100%;height:100%;transform-origin:50% 100%;animation:hwHop cubic-bezier(.33,0,.67,1) infinite alternate}
+.hw-pk svg{display:block;width:100%;height:100%;overflow:visible}
+.hw-pk .face{animation:hwFlicker 2.3s steps(1) infinite}
+@keyframes hwHop{0%{transform:translateY(0) scale(1.14,.84)}14%{transform:translateY(0) scale(1)}100%{transform:translateY(-70px) scale(.95,1.05) rotate(var(--tilt,4deg))}}
+@keyframes hwShadow{0%{transform:scale(1.15);opacity:1}14%{transform:scale(1)}100%{transform:scale(.45);opacity:.35}}
+@keyframes hwFlicker{0%{opacity:1}23%{opacity:.82}31%{opacity:1}58%{opacity:.9}64%{opacity:1}87%{opacity:.78}91%{opacity:1}}
+@keyframes hwWalk{from{left:-90px}to{left:calc(100% + 90px)}}
+.hw-off{position:fixed;right:10px;bottom:10px;z-index:51;pointer-events:auto;background:rgba(20,16,26,.8);color:#cbbfa8;border:1px solid rgba(255,255,255,.1);border-radius:8px;font:12px/1 'Golos Text',system-ui,sans-serif;padding:6px 9px;cursor:pointer}
+@media(max-width:560px){.hw-w1{width:96px;height:150px}.hw-w2{width:84px;height:138px}.hw-w3{display:none}.hw-pumpkins{height:110px}@keyframes hwHop{0%{transform:translateY(0) scale(1.14,.84)}14%{transform:translateY(0) scale(1)}100%{transform:translateY(-48px) scale(.95,1.05) rotate(var(--tilt,4deg))}}}
+@media(prefers-reduced-motion:reduce){.hw-web,.hw-spider,.hw-spider svg,.hw-pk,.hw-pk .bd,.hw-pk .sh,.hw-pk .face{animation:none}.hw-pumpkins{display:none}}
 </style>
 <script>
 (function(){
@@ -1508,57 +1513,47 @@ setTimeout(function(){
     if(!on || /halloween=0/.test(q)) return;
     try{ if(localStorage.getItem('hwOff') === '1' && !/halloween=1/.test(q)) return; }catch(e){}
 
-    // Паутина: радиальные нити + провисающая спираль (каждый виток — дуги, прогнутые к центру)
-    function web(){
-      const R = 250, n = 9, a0 = 0, a1 = Math.PI / 2, rings = 11;
-      const ang = Array.from({length: n}, (_, i) => a0 + (a1 - a0) * (i / (n - 1)) + (i && i < n - 1 ? (Math.random() - .5) * .08 : 0));
-      const len = ang.map(() => R * (.85 + Math.random() * .2));
-      let d = '';
-      ang.forEach((a, i) => { d += `M0 0L${(Math.cos(a) * len[i]).toFixed(1)} ${(Math.sin(a) * len[i]).toFixed(1)}`; });
-      for(let k = 1; k <= rings; k++){
-        const f = Math.pow(k / rings, 1.15) * .95;
-        for(let i = 0; i < n - 1; i++){
-          const r1 = len[i] * f * (1 + (Math.random() - .5) * .04), r2 = len[i + 1] * f * (1 + (Math.random() - .5) * .04);
-          const x1 = Math.cos(ang[i]) * r1, y1 = Math.sin(ang[i]) * r1, x2 = Math.cos(ang[i + 1]) * r2, y2 = Math.sin(ang[i + 1]) * r2;
-          const mx = (x1 + x2) / 2, my = (y1 + y2) / 2, sag = .16 + Math.random() * .06; // провисание к центру
-          d += `M${x1.toFixed(1)} ${y1.toFixed(1)}Q${(mx * (1 - sag)).toFixed(1)} ${(my * (1 - sag)).toFixed(1)} ${x2.toFixed(1)} ${y2.toFixed(1)}`;
-        }
-      }
-      return `<svg viewBox="0 0 250 250" aria-hidden="true"><path d="${d}" fill="none" stroke="rgba(235,235,245,.28)" stroke-width=".7" stroke-linecap="round"/></svg>`;
-    }
-    const spider = `<div class="hw-spider"><i></i><svg viewBox="0 0 20 20"><g stroke="#16121c" stroke-width="1.3" fill="none" stroke-linecap="round"><path d="M10 9L3 4M10 10L2 9M10 11L3 15M10 12L5 18M10 9L17 4M10 10L18 9M10 11L17 15M10 12L15 18"/></g><ellipse cx="10" cy="11" rx="3.2" ry="4" fill="#16121c"/><circle cx="10" cy="6.8" r="2.2" fill="#16121c"/><circle cx="9.2" cy="6.5" r=".45" fill="#ff7a1a"/><circle cx="10.8" cy="6.5" r=".45" fill="#ff7a1a"/></svg></div>`;
+    const WEB = ['data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAyCAYAAAA0j3keAAACuElEQVR4nMVZO3YDMQgc++WANK72fK624WApc4A0ITuLAKF1XjyNX/SBQfykze3z8wsJHgD2bPKFteWee2NTBwLguUAkXfsxUQL0Ld9IkRbySlSEWMm2QMrAp7vjMOyJmHCL0BVSTMKD5YThMIshg2YCivGKDJC4sHNCpYAmHijcxMgIRQIq18mETBuZywRxDOiqglVZ3RgymGAWVBGskmFHcLKRy7yQqKKyIBPsiQnObt8DWTwPYDyhrjuMMAvfca43inlR3eGqtickWKs3mQGC2L07xj2WLA8m9MRRQX18ZFb6GLB9nSJqBEzvL24/3d6EeQtMoToiTILXCEZX8RqWxWt+jbjR9WNmWSYYiIn7MU8yJLRSqYEx+8TNCxHIGq3HqQiv1iEPna5YBBNSrDVKoX0esiBLQO5bdZllxIYjDiw7OSEU5xqjTk5an+5ukSTrLF42nGPDyNg+r2ijeSNbnlznTv38UWSnYtjd74PmBWeYEdN7d0WI3ZPNM0luHXy/Bs1vmMRXRMhORQuynKpZPGiiuCTFhHjBliiywJWCCK+VZE4RNFZPSNDr0Laug8jdXKWHC/+dBuwoGVF3tnFWYL++MXPDbcHq0MqTWTFmmwQy+G+ZyE0LoynLCArW32fAkXWK8XSVF/osmxVHTeY60ET2yfhOc13JrJkcD/EDESHF/MLOWDm5qGBOCa1g9Y02RdTtrWD550pUAqKL/Azlx4vO9YM3R3Fw5ZQUiatfddlVpNmcEVIcTfZK3elA0XxKA0njK2CCO2UhehxMCRm0ScbuRZ1vjIriK1o3qBWj9WapKd8RN91oLsXsg5UJij7lKsZrLeNSVe++OtoWvoosy/5FeYR31SGDYPJ96O1Yfbn+NdQPvJvQEKu34t9THcwek8vIYsi/IP4Nkcu418zSX/+SDAB8A7qNzBPdxP9rAAAAAElFTkSuQmCC', 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAsCAYAAABygggEAAACG0lEQVR4nN2XQY7DMAhFf6sekE1WOV9W2XCwLucAswnJDwabTNQZaZCqNA7mGbCx/Xi/v3BRpu25Xu3I8vwBVG7wJgALg5dCJ9OZb0DF+r+2RiXD6jrITaBBT2IeZ/laN6CHSqs6hJ4YPsfzZnTtDGaiZ+OJ07MoNrZevgFH2NV14JELfcvggjZt+3sENoOStGf6LAuO9EzuCaC/nEZhjzy18PKcCAcceezhFnYvawAXpztl4EoBURxh996v9BP0l1x3VmdiYc/EhzeT3cYo1B7OYbcwSwdq6Sgtp54ojlELtXGuBW10+H0BMD+23YnLpe9UHRDQeua93WsBe2zh8uHx/3lgGTATMY5NLs00g45eVxqtgvCsrtRdgyqOkqqobash2NZhT2ac6/SK8x7t4VF+1YO9+JxGk8ZvdxE8s9stIOyNT4N5rO6bduDCLwxW+m9h8aGanB6nyEJb8bzx2IyLa+etsrJ0RiU2DLUgLoEZUBGXRUXHcw9maLTtAeeJ1VuCXThXLob2DEUVbUFSGrMBjrZF9jqa2Tyg7PvwIKADuGRG0Hrr9Zp+1YPA6ESJbWDpUQcujVfvTua9H8Dli9yVg4A64wyLJlxX7CAw6lD1qHr2whPHxBnl79Z9OAILGb8regVsoblzDWUZVbMdXIFqEVo5UJzAvy6fAOtfgUvyr8DZPv5xMDAuSB8B8y3yFnhBwQMSK63aU/oG6ueaHNrE/cUAAAAASUVORK5CYII=', 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAmCAYAAADa8osYAAAByElEQVR4nLVXO7LDMAjcZN4BaVz5fK7c6GAp3wFe8bQyQqBPnOyMR7aCWIQAkcfr9YtFbHk8VxY983goBSMSyc8SSLTnxRHhln8DgJSfFeMKEcmsYq1sR+0uyo+MEwB4OGd0ZIujM/DOiHOSx2TeT48oUjZrCGV2NeKnIyz5SWae35tDxmDZzXxIRAVivqmMc/psKGsN6xIR3L4lswZtikDLFVIddT0yKvMQnWclP9qRhjiKBP3AKPMrRNqNRBoYVohmXEfMVIEQ0Y5sTUsdHZTryVQ70mUH+HcVHyA+By0jaN0L4NoRs71JNIUDdQSeqEP/VO8NGXeUHIttMnpGJPhXRpMS1nUemIyb+hbUVT2q4E3UnYFlOhl1yUmo3cX7LMQovAW1S6ncU9o73y6RjBavICLSRXIFbsRZIq1Y3iAhvFLVVAZ7cb3VWsEJe0skqHem75sVNAHj1breBacNmkG57vUZCd4LAA8sV8UgGwyCm9cB6ojlWIh0OblDFgbP0/lh1CNE6DUxw3ZrplkMezlcCbzPtFu2wSf0XFSq6JVjpjnRVVovnqmDzKfE3numdboFW1TlGyTAFQynGT+O6G/Lx7HSQN7CH+LvheuKzqIjAAAAAElFTkSuQmCC'];
+    const spider = `<div class="hw-spider"><i></i><svg viewBox="0 0 28 28" aria-hidden="true"><g stroke="#120e16" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12L7 7L2 9M12 14L5 12L1 15M12 16L5 18L2 23M13 17L8 22L7 27M16 12L21 7L26 9M16 14L23 12L27 15M16 16L23 18L26 23M15 17L20 22L21 27"/></g><ellipse cx="14" cy="17" rx="4.6" ry="5.6" fill="#120e16"/><ellipse cx="14" cy="10.5" rx="3.2" ry="3" fill="#1c1622"/><circle cx="12.8" cy="10" r=".8" fill="#ff8a2a"/><circle cx="15.2" cy="10" r=".8" fill="#ff8a2a"/><ellipse cx="12.6" cy="15" rx="1.2" ry="2" fill="#fff" opacity=".12"/></svg></div>`;
 
-    // Пиксельная тыква 12x12
-    const PK = [
-      '.....gg.....',
-      '.....g......',
-      '..oooooooo..',
-      '.oOooOOooOo.',
-      'oOoooOOoooOo',
-      'oOyyoOOoyyOo',
-      'oOyyoOOoyyOo',
-      'oOooyOOyooOo',
-      'oOoyyyyyyoOo',
-      'oOooyoyyooOo',
-      '.oOooOOooOo.',
-      '..oooooooo..'];
-    const C = {g:'#4f7a28', o:'#e8791c', O:'#c45d10', y:'#ffd34a'};
-    let rects = '';
-    PK.forEach((row, y) => [...row].forEach((c, x) => { if(C[c]) rects += `<rect x="${x}" y="${y}" width="1.02" height="1.02" fill="${C[c]}"/>`; }));
-    const pumpkin = `<svg viewBox="0 0 12 12" shape-rendering="crispEdges" aria-hidden="true">${rects}</svg>`;
+    let uid = 0;
+    function pumpkin(){
+      const id = 'hwp' + (uid++);
+      const rib = (cx, rx, g) => `<ellipse cx="${cx}" cy="58" rx="${rx}" ry="31" fill="url(#${id}${g})" stroke="#7a2c05" stroke-opacity=".35" stroke-width="1"/>`;
+      return `<svg viewBox="0 0 100 92" aria-hidden="true">
+        <defs>
+          <radialGradient id="${id}a" cx=".38" cy=".32" r=".8"><stop offset="0" stop-color="#ffab45"/><stop offset=".55" stop-color="#ee7a1a"/><stop offset="1" stop-color="#a8420a"/></radialGradient>
+          <radialGradient id="${id}b" cx=".45" cy=".3" r=".85"><stop offset="0" stop-color="#ffb859"/><stop offset=".5" stop-color="#f4861f"/><stop offset="1" stop-color="#b44a0c"/></radialGradient>
+          <linearGradient id="${id}s" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7d9a3a"/><stop offset="1" stop-color="#3b5216"/></linearGradient>
+          <radialGradient id="${id}f" cx=".5" cy=".55" r=".6"><stop offset="0" stop-color="#fff6c2"/><stop offset=".45" stop-color="#ffc83a"/><stop offset="1" stop-color="#f07d0c"/></radialGradient>
+        </defs>
+        <ellipse cx="50" cy="60" rx="46" ry="30" fill="#8a3407" opacity=".5"/>
+        ${rib(22, 22, 'a')}${rib(78, 22, 'a')}${rib(35, 23, 'b')}${rib(65, 23, 'b')}${rib(50, 21, 'b')}
+        <path d="M47 30C46 22 47 15 52 9C55 7 57 9 55 11C51 16 51 23 53 30Z" fill="url(#${id}s)"/>
+        <path d="M54 12C60 8 66 11 66 16" fill="none" stroke="#557a24" stroke-width="2" stroke-linecap="round"/>
+        <g class="face" fill="url(#${id}f)" style="filter:drop-shadow(0 0 4px rgba(255,170,40,.9))">
+          <path d="M26 52L36 41L40 54Z"/><path d="M74 52L64 41L60 54Z"/>
+          <path d="M47 58L50 52L53 58Z"/>
+          <path d="M24 64Q50 84 76 64L70 66L66 71L60 67L55 73L50 68L45 73L40 67L34 71L30 66Z"/>
+        </g>
+        <ellipse cx="33" cy="44" rx="7" ry="11" fill="#fff" opacity=".13" transform="rotate(-20 33 44)"/>
+      </svg>`;
+    }
 
     const box = document.createElement('div');
-    box.innerHTML = `<div class="hw hw-web l">${web()}${spider}</div><div class="hw hw-web r">${web()}</div><div class="hw hw-pumpkins"></div><button class="hw-off" type="button">Убрать тыквы</button>`;
+    box.innerHTML = `<div class="hw hw-web hw-w1"><img src="${WEB[0]}" alt="">${spider}</div><div class="hw hw-web hw-w2"><img src="${WEB[1]}" alt=""></div><div class="hw hw-web hw-w3"><img src="${WEB[2]}" alt=""></div><div class="hw hw-pumpkins"></div><button class="hw-off" type="button">Убрать тыквы</button>`;
     document.body.append(...box.children);
+
     const row = document.querySelector('.hw-pumpkins');
-    const count = innerWidth < 560 ? 3 : 5;
+    const small = innerWidth < 560, count = small ? 3 : 4;
     for(let i = 0; i < count; i++){
+      const size = small ? 40 + Math.random() * 12 : 58 + Math.random() * 18;
+      const walk = (small ? 16 : 26) + Math.random() * 12;
+      const hop = (.62 + Math.random() * .25).toFixed(2), hd = (-Math.random()).toFixed(2);
       const p = document.createElement('div');
-      const dur = 22 + Math.random() * 16;
       p.className = 'hw-pk';
-      p.style.animationDuration = dur + 's';
-      p.style.animationDelay = (-dur * i / count - Math.random() * 3) + 's';
-      p.innerHTML = `<div style="animation-duration:${(.75 + Math.random() * .35).toFixed(2)}s;animation-delay:-${Math.random().toFixed(2)}s">${pumpkin}</div>`;
+      p.style.cssText = `width:${size}px;height:${size * .92}px;animation-duration:${walk}s;animation-delay:${-walk * i / count - Math.random() * 2}s`;
+      p.innerHTML = `<div class="sh" style="animation-duration:${hop}s;animation-delay:${hd}s"></div><div class="bd" style="--tilt:${(Math.random() * 10 - 5).toFixed(1)}deg;animation-duration:${hop}s;animation-delay:${hd}s">${pumpkin()}</div>`;
       row.appendChild(p);
     }
     document.querySelector('.hw-off').onclick = () => {
