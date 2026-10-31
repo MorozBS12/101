@@ -1491,20 +1491,19 @@ setTimeout(function(){
 .hw-spider svg{position:absolute;left:-13px;bottom:-22px;width:28px;height:28px;animation:hwWiggle 1.6s ease-in-out infinite;transform-origin:50% 0}
 @keyframes hwDrop{0%,100%{height:40px}45%,60%{height:150px}}
 @keyframes hwWiggle{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}}
-.hw-pumpkins{left:0;right:0;bottom:0;height:100px}
-.hw-pk{position:absolute;bottom:4px;animation:hwWalk linear infinite}
-.hw-pk .sh{position:absolute;left:12%;right:12%;bottom:-4px;height:10px;border-radius:50%;background:radial-gradient(closest-side,rgba(0,0,0,.55),transparent);animation:hwShadow ease-in-out infinite alternate}
-.hw-pk .bd{width:100%;height:100%;transform-origin:50% 100%;animation:hwHop cubic-bezier(.33,0,.67,1) infinite alternate}
-.hw-pk svg{display:block;width:100%;height:100%;overflow:visible}
-.hw-pk .face{animation:hwFlicker 2.3s steps(1) infinite}
-@keyframes hwHop{0%{transform:translateY(0) scale(1.14,.84)}14%{transform:translateY(0) scale(1)}100%{transform:translateY(-44px) scale(.95,1.05) rotate(var(--tilt,4deg))}}
-@keyframes hwShadow{0%{transform:scale(1.15);opacity:1}14%{transform:scale(1)}100%{transform:scale(.45);opacity:.35}}
-@keyframes hwFlicker{0%{opacity:1}23%{opacity:.82}31%{opacity:1}58%{opacity:.9}64%{opacity:1}87%{opacity:.78}91%{opacity:1}}
-@keyframes hwWalk{from{left:-90px}to{left:calc(100% + 90px)}}
-.hw-off,.hw-snd{position:fixed;right:10px;bottom:10px;z-index:51;pointer-events:auto;background:rgba(20,16,26,.8);color:#cbbfa8;border:1px solid rgba(255,255,255,.1);border-radius:8px;font:12px/1 'Golos Text',system-ui,sans-serif;padding:6px 9px;cursor:pointer}
-@media(max-width:560px){.hw-w1{width:88px;height:200px}.hw-w2{width:76px;height:170px}.hw-w3{display:none}.hw-pumpkins{height:80px}@keyframes hwHop{0%{transform:translateY(0) scale(1.14,.84)}14%{transform:translateY(0) scale(1)}100%{transform:translateY(-30px) scale(.95,1.05) rotate(var(--tilt,4deg))}}}
-.hw-snd{right:auto;left:10px}
-@media(prefers-reduced-motion:reduce){.hw-web,.hw-spider,.hw-spider svg,.hw-pk,.hw-pk .bd,.hw-pk .sh,.hw-pk .face{animation:none}.hw-pumpkins{display:none}}
+.hw-patch{left:6px;bottom:0;width:190px;height:96px}
+.hw-pk{position:absolute;bottom:2px}
+.hw-pk svg{display:block;width:100%;height:100%;overflow:visible;filter:drop-shadow(0 3px 3px rgba(0,0,0,.5))}
+.hw-pk.p1{left:18px;width:84px;height:70px;z-index:2}
+.hw-pk.p2{left:92px;width:60px;height:50px;z-index:3}
+.hw-pk.p3{left:0;bottom:30px;width:42px;height:35px;z-index:1;filter:brightness(.8)}
+.hw-pk .face{animation:hwFlicker 2.6s ease-in-out infinite}
+.hw-pk.p2 .face{animation-duration:3.1s;animation-delay:-1.2s}
+.hw-light{position:absolute;left:-40px;right:-60px;bottom:-30px;height:110px;border-radius:50%;background:radial-gradient(closest-side,rgba(255,150,40,.32),rgba(255,110,20,.1) 55%,transparent);mix-blend-mode:screen;animation:hwFlicker 2.6s ease-in-out infinite}
+@keyframes hwFlicker{0%,100%{opacity:1}18%{opacity:.8}24%{opacity:.95}41%{opacity:.72}47%{opacity:1}66%{opacity:.86}80%{opacity:.97}88%{opacity:.76}}
+.hw-off{position:fixed;right:10px;bottom:10px;z-index:51;pointer-events:auto;background:rgba(20,16,26,.8);color:#cbbfa8;border:1px solid rgba(255,255,255,.1);border-radius:8px;font:12px/1 'Golos Text',system-ui,sans-serif;padding:6px 9px;cursor:pointer}
+@media(max-width:560px){.hw-w1{width:88px;height:200px}.hw-w2{width:76px;height:170px}.hw-w3{display:none}.hw-patch{transform:scale(.72);transform-origin:0 100%}}
+@media(prefers-reduced-motion:reduce){.hw-web,.hw-spider,.hw-spider svg,.hw-pk .face,.hw-light{animation:none}}
 </style>
 <script>
 (function(){
@@ -1518,117 +1517,49 @@ setTimeout(function(){
     const spider = `<div class="hw-spider"><i></i><svg viewBox="0 0 28 28" aria-hidden="true"><g stroke="#120e16" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12L7 7L2 9M12 14L5 12L1 15M12 16L5 18L2 23M13 17L8 22L7 27M16 12L21 7L26 9M16 14L23 12L27 15M16 16L23 18L26 23M15 17L20 22L21 27"/></g><ellipse cx="14" cy="17" rx="4.6" ry="5.6" fill="#120e16"/><ellipse cx="14" cy="10.5" rx="3.2" ry="3" fill="#1c1622"/><circle cx="12.8" cy="10" r=".8" fill="#ff8a2a"/><circle cx="15.2" cy="10" r=".8" fill="#ff8a2a"/><ellipse cx="12.6" cy="15" rx="1.2" ry="2" fill="#fff" opacity=".12"/></svg></div>`;
 
     let uid = 0;
-    function pumpkin(){
+    // Тыква: доли с объёмом, бороздки, толщина вырезов, свет свечи изнутри. carved=false — просто тыква
+    function pumpkin(carved, tilt){
       const id = 'hwp' + (uid++);
-      const rib = (cx, rx, g) => `<ellipse cx="${cx}" cy="58" rx="${rx}" ry="31" fill="url(#${id}${g})" stroke="#7a2c05" stroke-opacity=".35" stroke-width="1"/>`;
-      return `<svg viewBox="0 0 100 92" aria-hidden="true">
-        <defs>
-          <radialGradient id="${id}a" cx=".38" cy=".32" r=".8"><stop offset="0" stop-color="#ffab45"/><stop offset=".55" stop-color="#ee7a1a"/><stop offset="1" stop-color="#a8420a"/></radialGradient>
-          <radialGradient id="${id}b" cx=".45" cy=".3" r=".85"><stop offset="0" stop-color="#ffb859"/><stop offset=".5" stop-color="#f4861f"/><stop offset="1" stop-color="#b44a0c"/></radialGradient>
-          <linearGradient id="${id}s" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7d9a3a"/><stop offset="1" stop-color="#3b5216"/></linearGradient>
-          <radialGradient id="${id}f" cx=".5" cy=".55" r=".6"><stop offset="0" stop-color="#fff6c2"/><stop offset=".45" stop-color="#ffc83a"/><stop offset="1" stop-color="#f07d0c"/></radialGradient>
-        </defs>
-        <ellipse cx="50" cy="60" rx="46" ry="30" fill="#8a3407" opacity=".5"/>
-        ${rib(22, 22, 'a')}${rib(78, 22, 'a')}${rib(35, 23, 'b')}${rib(65, 23, 'b')}${rib(50, 21, 'b')}
-        <path d="M47 30C46 22 47 15 52 9C55 7 57 9 55 11C51 16 51 23 53 30Z" fill="url(#${id}s)"/>
-        <path d="M54 12C60 8 66 11 66 16" fill="none" stroke="#557a24" stroke-width="2" stroke-linecap="round"/>
-        <g class="face" fill="url(#${id}f)" style="filter:drop-shadow(0 0 4px rgba(255,170,40,.9))">
-          <path d="M26 52L36 41L40 54Z"/><path d="M74 52L64 41L60 54Z"/>
-          <path d="M47 58L50 52L53 58Z"/>
-          <path d="M24 64Q50 84 76 64L70 66L66 71L60 67L55 73L50 68L45 73L40 67L34 71L30 66Z"/>
+      const lobe = (cx, rx, ry, g, o) => `<ellipse cx="${cx}" cy="62" rx="${rx}" ry="${ry}" fill="url(#${id}${g})"${o ? ` opacity="${o}"` : ''}/>`;
+      const groove = x => `<path d="M${x} 36C${x + (x - 60) * .35} 52 ${x + (x - 60) * .35} 74 ${x} 90" fill="none" stroke="#6d2603" stroke-opacity=".55" stroke-width="2.2" stroke-linecap="round" filter="url(#${id}bl)"/>`;
+      const face = carved ? `
+        <g transform="translate(0 1.6)" fill="#4a1802">
+          <path d="M33 56L44 43L49 59Z"/><path d="M87 56L76 43L71 59Z"/><path d="M57 64L60 57L63 64Z"/>
+          <path d="M30 70Q60 94 90 70L83 72L78 78L71 73L65 80L60 74L55 80L49 73L42 78L37 72Z"/>
         </g>
-        <ellipse cx="33" cy="44" rx="7" ry="11" fill="#fff" opacity=".13" transform="rotate(-20 33 44)"/>
+        <g class="face" fill="url(#${id}f)">
+          <path d="M33 56L44 43L49 59Z"/><path d="M87 56L76 43L71 59Z"/><path d="M57 64L60 57L63 64Z"/>
+          <path d="M30 70Q60 94 90 70L83 72L78 78L71 73L65 80L60 74L55 80L49 73L42 78L37 72Z"/>
+        </g>
+        <ellipse class="face" cx="60" cy="66" rx="38" ry="24" fill="url(#${id}g)" style="mix-blend-mode:screen"/>` : '';
+      return `<svg viewBox="0 0 120 100" aria-hidden="true" style="transform:rotate(${tilt || 0}deg)">
+        <defs>
+          <radialGradient id="${id}a" cx=".35" cy=".3" r=".85"><stop offset="0" stop-color="#e9862a"/><stop offset=".6" stop-color="#b9520d"/><stop offset="1" stop-color="#5e2204"/></radialGradient>
+          <radialGradient id="${id}b" cx=".4" cy=".28" r=".85"><stop offset="0" stop-color="#ffb055"/><stop offset=".45" stop-color="#f07f1e"/><stop offset=".85" stop-color="#b5490a"/><stop offset="1" stop-color="#7a2c04"/></radialGradient>
+          <linearGradient id="${id}s" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#4f6a20"/><stop offset=".45" stop-color="#8aa54a"/><stop offset="1" stop-color="#34481a"/></linearGradient>
+          <radialGradient id="${id}f" cx=".5" cy=".6" r=".7"><stop offset="0" stop-color="#fffbe0"/><stop offset=".35" stop-color="#ffd25a"/><stop offset=".8" stop-color="#ff9a1c"/><stop offset="1" stop-color="#e2600a"/></radialGradient>
+          <radialGradient id="${id}g"><stop offset="0" stop-color="#ffb347" stop-opacity=".45"/><stop offset="1" stop-color="#ff7a00" stop-opacity="0"/></radialGradient>
+          <filter id="${id}bl" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="1.1"/></filter>
+        </defs>
+        ${lobe(30, 26, 31, 'a')}${lobe(90, 26, 31, 'a')}${lobe(42, 27, 34, 'b')}${lobe(78, 27, 34, 'b')}${lobe(60, 24, 35, 'b')}
+        ${groove(46)}${groove(74)}${groove(34)}${groove(86)}
+        <ellipse cx="60" cy="94" rx="40" ry="5" fill="#3a1402" opacity=".35" filter="url(#${id}bl)"/>
+        <path d="M55 33C54 24 55 16 60 10C62 8 66 9 65 12C61 17 62 25 64 33Z" fill="url(#${id}s)"/>
+        <path d="M58 30C58 23 59 17 62 12" fill="none" stroke="#c7d98a" stroke-opacity=".35" stroke-width="1"/>
+        <ellipse cx="60" cy="33" rx="7" ry="2.2" fill="#5a2a08" opacity=".6"/>
+        <path d="M64 13C71 8 78 12 76 18C75 21 72 20 73 17" fill="none" stroke="#4d6b1f" stroke-width="1.6" stroke-linecap="round"/>
+        ${face}
+        <ellipse cx="40" cy="46" rx="6" ry="12" fill="#fff" opacity=".12" transform="rotate(-18 40 46)" filter="url(#${id}bl)"/>
       </svg>`;
     }
 
     const box = document.createElement('div');
-    box.innerHTML = `<div class="hw hw-web hw-w1"><img src="${WEB[0]}" alt="">${spider}</div><div class="hw hw-web hw-w2"><img src="${WEB[1]}" alt=""></div><div class="hw hw-web hw-w3"><img src="${WEB[2]}" alt=""></div><div class="hw hw-pumpkins"></div><button class="hw-off" type="button">Убрать тыквы</button><button class="hw-snd" type="button"></button>`;
+    box.innerHTML = `<div class="hw hw-web hw-w1"><img src="${WEB[0]}" alt="">${spider}</div><div class="hw hw-web hw-w2"><img src="${WEB[1]}" alt=""></div><div class="hw hw-web hw-w3"><img src="${WEB[2]}" alt=""></div>
+      <div class="hw hw-patch"><span class="hw-light"></span><div class="hw-pk p3">${pumpkin(false, 6)}</div><div class="hw-pk p1">${pumpkin(true, -3)}</div><div class="hw-pk p2">${pumpkin(true, 5)}</div></div>
+      <button class="hw-off" type="button">Убрать тыквы</button>`;
     document.body.append(...box.children);
-
-    const row = document.querySelector('.hw-pumpkins');
-    const small = innerWidth < 560, count = small ? 3 : 4;
-    for(let i = 0; i < count; i++){
-      const size = small ? 26 + Math.random() * 6 : 34 + Math.random() * 10;
-      const walk = (small ? 16 : 26) + Math.random() * 12;
-      const hop = (.62 + Math.random() * .25).toFixed(2), hd = (-Math.random()).toFixed(2);
-      const p = document.createElement('div');
-      p.className = 'hw-pk';
-      p.style.cssText = `width:${size}px;height:${size * .92}px;animation-duration:${walk}s;animation-delay:${-walk * i / count - Math.random() * 2}s`;
-      p.innerHTML = `<div class="sh" style="animation-duration:${hop}s;animation-delay:${hd}s"></div><div class="bd" style="--tilt:${(Math.random() * 10 - 5).toFixed(1)}deg;animation-duration:${hop}s;animation-delay:${hd}s">${pumpkin()}</div>`;
-      row.appendChild(p);
-    }
-    // Звук: ветер, низкий гул, иногда сова или скрип. Браузер даёт включить звук только после первого касания или клика.
-    const hwSound = (() => {
-      let ctx = null, master = null, timer = 0, on = true, started = false;
-      try{ on = localStorage.getItem('hwSound') !== '0'; }catch(e){}
-      const btn = document.querySelector('.hw-snd');
-      const label = () => { btn.textContent = on ? 'Звук: вкл' : 'Звук: выкл'; };
-      label();
-      function build(){
-        const AC = window.AudioContext || window.webkitAudioContext;
-        if(!AC) return false;
-        ctx = new AC();
-        master = ctx.createGain(); master.gain.value = 0; master.connect(ctx.destination);
-        // ветер: «коричневый» шум через полосовой фильтр, который медленно гуляет
-        const len = ctx.sampleRate * 4, buf = ctx.createBuffer(1, len, ctx.sampleRate), d = buf.getChannelData(0);
-        let last = 0;
-        for(let i = 0; i < len; i++){ last = (last + .02 * (Math.random() * 2 - 1)) / 1.02; d[i] = last * 3.5; }
-        const src = ctx.createBufferSource(); src.buffer = buf; src.loop = true;
-        const bp = ctx.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = 520; bp.Q.value = .9;
-        const lfo = ctx.createOscillator(), lg = ctx.createGain(); lfo.frequency.value = .07; lg.gain.value = 320; lfo.connect(lg); lg.connect(bp.frequency);
-        const wg = ctx.createGain(); wg.gain.value = .55;
-        const lfo2 = ctx.createOscillator(), lg2 = ctx.createGain(); lfo2.frequency.value = .045; lg2.gain.value = .3; lfo2.connect(lg2); lg2.connect(wg.gain);
-        src.connect(bp); bp.connect(wg); wg.connect(master);
-        // низкий тревожный гул
-        [[55, .05], [55.7, .05], [82.4, .02]].forEach(([f, v]) => { const o = ctx.createOscillator(), g = ctx.createGain(); o.frequency.value = f; g.gain.value = v; o.connect(g); g.connect(master); o.start(); });
-        src.start(); lfo.start(); lfo2.start();
-        return true;
-      }
-      function owl(){
-        const t = ctx.currentTime + .05;
-        [[0, 430, 390, .38], [.6, 405, 355, .75]].forEach(([dt, f1, f2, dur]) => {
-          const o = ctx.createOscillator(), g = ctx.createGain(), vib = ctx.createOscillator(), vg = ctx.createGain();
-          o.frequency.setValueAtTime(f1, t + dt); o.frequency.exponentialRampToValueAtTime(f2, t + dt + dur);
-          vib.frequency.value = 6; vg.gain.value = 5; vib.connect(vg); vg.connect(o.frequency);
-          g.gain.setValueAtTime(0, t + dt); g.gain.linearRampToValueAtTime(.09, t + dt + .07); g.gain.exponentialRampToValueAtTime(.001, t + dt + dur + .05);
-          o.connect(g); g.connect(master); o.start(t + dt); vib.start(t + dt); o.stop(t + dt + dur + .1); vib.stop(t + dt + dur + .1);
-        });
-      }
-      function creak(){
-        const t = ctx.currentTime + .05;
-        const o = ctx.createOscillator(); o.type = 'sawtooth';
-        o.frequency.setValueAtTime(85, t); o.frequency.linearRampToValueAtTime(150, t + .55); o.frequency.linearRampToValueAtTime(70, t + 1.2);
-        const f = ctx.createBiquadFilter(); f.type = 'bandpass'; f.frequency.value = 950; f.Q.value = 5;
-        const am = ctx.createGain(); am.gain.value = .5;
-        const pulse = ctx.createOscillator(), pg = ctx.createGain(); pulse.type = 'square'; pulse.frequency.value = 24; pg.gain.value = .5; pulse.connect(pg); pg.connect(am.gain);
-        const g = ctx.createGain(); g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.07, t + .2); g.gain.linearRampToValueAtTime(0, t + 1.25);
-        o.connect(f); f.connect(am); am.connect(g); g.connect(master);
-        o.start(t); pulse.start(t); o.stop(t + 1.3); pulse.stop(t + 1.3);
-      }
-      function schedule(){
-        clearTimeout(timer);
-        timer = setTimeout(() => { if(on && ctx && ctx.state === 'running') (Math.random() < .55 ? owl : creak)(); schedule(); }, 9000 + Math.random() * 14000);
-      }
-      function fade(v){ if(master){ const t = ctx.currentTime; master.gain.cancelScheduledValues(t); master.gain.setValueAtTime(master.gain.value, t); master.gain.linearRampToValueAtTime(v, t + (v ? 2.5 : .4)); } }
-      function start(){
-        if(!ctx && !build()) return;
-        ctx.resume(); fade(.4); schedule(); started = true;
-      }
-      function stop(){ clearTimeout(timer); fade(0); if(ctx) setTimeout(() => { if(!on && ctx) ctx.suspend(); }, 500); }
-      const first = () => { removeEventListener('pointerdown', first, true); removeEventListener('keydown', first, true); if(on && !started) start(); };
-      addEventListener('pointerdown', first, true); addEventListener('keydown', first, true);
-      btn.onclick = () => {
-        on = !on; label();
-        try{ localStorage.setItem('hwSound', on ? '1' : '0'); }catch(e){}
-        on ? start() : stop();
-      };
-      document.addEventListener('visibilitychange', () => { if(!ctx) return; if(document.hidden) ctx.suspend(); else if(on && started) ctx.resume(); });
-      return { stop(){ on = false; stop(); } };
-    })();
-
     document.querySelector('.hw-off').onclick = () => {
-      hwSound.stop();
-      document.querySelectorAll('.hw,.hw-off,.hw-snd').forEach(e => e.remove());
+      document.querySelectorAll('.hw,.hw-off').forEach(e => e.remove());
       try{ localStorage.setItem('hwOff', '1'); }catch(e){}
     };
   }catch(e){}
