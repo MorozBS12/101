@@ -290,10 +290,16 @@ main{flex:1;min-width:0;width:100%;padding:0 var(--gut) 56px}
   padding:26px 30px;border-radius:12px;
   background:radial-gradient(ellipse at 12% 0%,rgba(var(--c),.16),transparent 60%),var(--slate);
 }
-.profile.hasbg{background:linear-gradient(90deg,rgba(10,8,18,.15),rgba(10,8,18,.55)),var(--pbg) center bottom/cover;image-rendering:pixelated}
+.profile.hasbg{position:relative;overflow:hidden;isolation:isolate;background:linear-gradient(90deg,rgba(10,8,18,.15),rgba(10,8,18,.55)),var(--pbg) center bottom/cover;image-rendering:pixelated}
 .profile.hasbg>img,.profile.hasbg h1,.profile.hasbg .facts,.profile.hasbg .ktiers{image-rendering:auto}
 .profile.hasbg .fact,.profile.hasbg .ktiers>*{background:rgba(16,14,24,.6);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
 .profile.hasbg h1{text-shadow:0 2px 0 rgba(0,0,0,.5)}
+.profile.hasbg>img,.profile.hasbg>div{position:relative;z-index:2}
+.pfx{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none;image-rendering:pixelated}
+.pglow{position:absolute;z-index:1;left:0;bottom:-10%;width:340px;height:120%;pointer-events:none;background:radial-gradient(closest-side,rgba(255,190,80,.28),transparent);animation:pglow 5s ease-in-out infinite}
+@keyframes pglow{50%{opacity:.55;transform:scale(.94)}}
+@media(max-width:560px){.pglow{width:200px}}
+@media(prefers-reduced-motion:reduce){.pglow{animation:none}}
 .profile>img{height:220px;object-fit:contain}
 .profile h1{font-family:'Pixelify Sans',system-ui,sans-serif;font-size:clamp(24px,3vw,32px);font-weight:600;word-break:break-all}
 .profile>div{flex:1 1 280px;min-width:0}
@@ -823,6 +829,7 @@ function playerPage(name){
   return `
   <a href="#/" class="back"><svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>Назад</a>
   <div class="profile g${tierNum(top)}${PBG[p.name.toLowerCase()] ? ' hasbg' : ''}"${PBG[p.name.toLowerCase()] ? ` style="--pbg:url('${PBG[p.name.toLowerCase()]}')"` : ''}>
+    ${PBG[p.name.toLowerCase()] ? '<canvas class="pfx" aria-hidden="true"></canvas><span class="pglow" aria-hidden="true"></span>' : ''}
     ${skinImg(p.name, 'full')}
     <div>
       <h1>${esc(p.name)}</h1>
@@ -1326,8 +1333,53 @@ function router(){
   markShortColumns();
   watchSkins();
   wireMePage();
+  startProfileFx();
   if(seg === 'team') loadTeam();
   if(seg === 'admin') wireAdmin();
+}
+
+// Живой фон профиля: мерцающие звёзды и поднимающиеся искры (пиксельные)
+let fxRaf = 0;
+function startProfileFx(){
+  cancelAnimationFrame(fxRaf);
+  const cv = document.querySelector('.pfx');
+  if(!cv) return;
+  const still = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const ctx = cv.getContext('2d');
+  const P = 3; // размер «пикселя»
+  let w = 0, h = 0, stars = [], sparks = [];
+  const r = cv.getBoundingClientRect();
+  w = Math.max(1, Math.round(r.width / P)); h = Math.max(1, Math.round(r.height / P));
+  cv.width = w; cv.height = h;
+  stars = Array.from({length: Math.round(w * h / 520)}, () => ({x: Math.random() * w | 0, y: Math.random() * h * .4 | 0, ph: Math.random() * 6.28, sp: .6 + Math.random() * 1.6}));
+  const spark = initial => ({x: Math.random() * w, y: initial ? Math.random() * h : h + 2, vy: .05 + Math.random() * .12, vx: (Math.random() - .5) * .04, life: initial ? Math.random() * 200 : 0, max: 260 + Math.random() * 320, big: Math.random() < .25});
+  sparks = Array.from({length: Math.round(w / 14)}, () => spark(true));
+  let last = performance.now();
+  function frame(t){
+    if(!cv.isConnected) return;
+    const dt = Math.min(3, (t - last) / 16.7); last = t;
+    ctx.clearRect(0, 0, w, h);
+    for(const s of stars){
+      const a = .3 + .7 * Math.max(0, Math.sin(t / 1000 * s.sp + s.ph));
+      ctx.fillStyle = `rgba(255,244,220,${a.toFixed(2)})`;
+      ctx.fillRect(s.x, s.y, 1, 1);
+    }
+    for(let i = 0; i < sparks.length; i++){
+      const s = sparks[i];
+      s.life += dt; s.y -= s.vy * dt; s.x += s.vx * dt + Math.sin((s.life + i * 40) / 60) * .03;
+      const k = s.life / s.max;
+      if(k >= 1 || s.y < -2){ sparks[i] = spark(false); continue; }
+      const a = k < .15 ? k / .15 : 1 - (k - .15) / .85;
+      ctx.fillStyle = `rgba(255,${s.big ? 215 : 185},90,${(a * .9).toFixed(2)})`;
+      ctx.fillRect(s.x | 0, s.y | 0, s.big ? 2 : 1, s.big ? 2 : 1);
+    }
+    if(!still) fxRaf = requestAnimationFrame(frame);
+  }
+  frame(last);
+  if(!startProfileFx.wired){
+    startProfileFx.wired = true;
+    let tm; addEventListener('resize', () => { clearTimeout(tm); tm = setTimeout(() => { if(document.querySelector('.pfx')) startProfileFx(); }, 150); });
+  }
 }
 
 function normalize(list){
