@@ -527,6 +527,9 @@ img[data-skin]:not([data-ok]){animation:pulse 1.1s ease-in-out infinite;border-r
 .mctop{display:flex;gap:8px;margin-bottom:10px;align-items:flex-end}
 .mctop .col{display:grid}
 .mctop .meta{font-family:'Pixelify Sans',system-ui,sans-serif;font-size:13px;color:#3f3f3f;line-height:1.35;padding:0 0 4px 6px}
+.mcpl{width:calc(var(--s) * 2.3);height:calc(var(--s) * 4);background:#000;box-shadow:inset 2px 2px 0 #373737,inset -2px -2px 0 #fff;display:grid;place-items:center;overflow:hidden}
+.mcpl img{height:88%;width:auto;max-width:92%;object-fit:contain}
+.mctop .meta{align-self:flex-start;padding-top:4px}
 .slot{position:relative;width:var(--s);height:var(--s);background:#8b8b8b;box-shadow:inset 2px 2px 0 #373737,inset -2px -2px 0 #fff;display:grid;place-items:center;cursor:default}
 .slot img{image-rendering:pixelated}
 .slot:hover{background:#a3a3a3}
@@ -1477,6 +1480,7 @@ function kitTab(){
     <div class="mcgui">
       <div class="mctop">
         <div class="col">${KIT_INV.armor.map(mcSlot).join('')}</div>
+        <div class="mcpl"><img src="https://visage.surgeplay.com/full/512/MorozBS" alt="MorozBS" onerror="this.onerror=null;this.src='https://mc-heads.net/body/MorozBS/200'"></div>
         <div class="col">${mcSlot(KIT_INV.off)}</div>
         <div class="meta">Весь сет:<br>Защита IV<br>Прочность III<br><br>Лук:<br>Откидывание II</div>
       </div>
@@ -1535,22 +1539,9 @@ high: `# Высокие тесты
 3. Бой со всеми **HT1 игроками** - нужно выиграть (если HT1 проигрывает, он понижается). FT16 + BO3
 > Или победа в **Мейджоре**
 
-## Тест на LT1
-Добавлено 5 модификаторов. Через вето вы баните 4, играется только один.
-- [[totem_of_undying]] **Шилдлесс** - тотем бессмертия вместо щита
-- [[tnt_minecart]] **Хард** - убирает 1 вагонетку из кита
-- [[crossbow]] **Хбоу** - арбалет (Пронзание) и зажигалка вместо лука и одной вагонетки
-- [[netherite_spear]] **Копьё** - копьё с Лунжем III вместо жемчуга
-- [[diamond_leggings]] **Бум** - поножи на Взрывоустойчивость IV вместо зарядов ветра
-
-## Тест на HT1
-Добавлено ещё 2 модификатора.
-- [[elytra]] **Элитра** - элитры и 24 фейерверка (1 длительность полёта) вместо 1 силы и 1 скорости
-- [[experience_bottle]] **NoMend** - убирает 16 пузырьков опыта из кита
 \`\`\`
 BO3: сначала каждый банит по 1 карте, потом выбирает одну, которая будет играться.
 Оставшаяся карта - решающая, играется при счёте 1-1.
-На третью карту модификатор не действует.
 \`\`\``,
 
 demote: `# Демоуты
