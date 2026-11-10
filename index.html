@@ -548,6 +548,107 @@ img[data-skin]:not([data-ok]){animation:pulse 1.1s ease-in-out infinite;border-r
 .kitlist small{display:block;color:var(--faint);font-size:12.5px;line-height:1.3}
 @media(max-width:560px){.md h2{font-size:22px}.rtabs{width:100%}.rtabs a{flex:1;justify-content:center;padding:8px 6px;font-size:13px}.rtabs a img{display:none}.kitwrap{gap:14px}}
 @media(prefers-reduced-motion:reduce){.ench:after{animation:none}}
+/* --- Турниры --- */
+.tchip{display:inline-block;font-family:'Golos Text',sans-serif;font-weight:700;font-size:11px;line-height:1;padding:3px 5px 2px;border-radius:4px;color:rgb(var(--c));background:rgba(var(--c),.12);box-shadow:inset 0 0 0 1px rgba(var(--c),.28)}
+.hd{width:22px;height:22px;image-rendering:pixelated;border-radius:3px;flex-shrink:0;background:var(--slate-2)}
+.tm-sub{color:var(--dim);font-size:14px;margin-top:6px}
+.tm-st{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;padding:4px 9px;border-radius:999px;background:var(--slate-2);color:var(--dim)}
+.tm-st:before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor}
+.tm-st.reg{color:var(--dia)}
+.tm-st.live{color:var(--up)}
+.tm-st.done{color:rgb(var(--t1-rgb))}
+.tm-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px;margin-top:20px}
+.tm-card{display:block;padding:18px;background:var(--slate);border-radius:12px;color:inherit;text-decoration:none;transition:background .15s;box-shadow:inset 0 0 0 1px transparent}
+.tm-card:hover{background:var(--slate-2)}
+.tm-card h3{font-family:'Pixelify Sans',system-ui,sans-serif;font-weight:600;font-size:21px;line-height:1.2;margin:12px 0 4px;word-break:break-word}
+.tm-card .who{color:var(--faint);font-size:13px}
+.tm-heads{display:flex;margin-top:14px;align-items:center}
+.tm-heads img{width:26px;height:26px;margin-right:-6px;border:2px solid var(--slate);border-radius:5px;image-rendering:pixelated;background:var(--slate-2)}
+.tm-card:hover .tm-heads img{border-color:var(--slate-2)}
+.tm-heads span{margin-left:14px;color:var(--dim);font-size:13px}
+.tm-win{display:flex;align-items:center;gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid var(--edge);font-size:14px;color:var(--dim)}
+.tm-win b{color:rgb(var(--t1-rgb));font-weight:600}
+.tm-form{background:var(--slate);border-radius:12px;padding:18px;margin-top:20px;max-width:640px}
+.tm-form h4{font-size:15px;font-weight:600;margin-bottom:10px}
+.tm-form .rowf{display:flex;gap:8px;flex-wrap:wrap}
+.tm-form input{flex:1 1 180px;min-width:0;padding:10px 12px;border-radius:8px;border:1px solid var(--edge);background:var(--ground);color:var(--ink);font:inherit;font-size:14px}
+.tm-form input:focus{outline:none;border-color:var(--dia)}
+.tbtn{padding:10px 16px;border-radius:8px;border:0;background:var(--ink);color:var(--ground);font:inherit;font-size:14px;font-weight:600;cursor:pointer}
+.tbtn:hover{filter:brightness(.92)}
+.tbtn:disabled{opacity:.5;cursor:default}
+.tbtn.ghost{background:transparent;color:var(--dim);box-shadow:inset 0 0 0 1px var(--edge)}
+.tbtn.ghost:hover{color:var(--ink)}
+.tbtn.danger{background:transparent;color:var(--down);box-shadow:inset 0 0 0 1px rgba(224,100,90,.35)}
+.tm-msg{font-size:13.5px;margin-top:10px;min-height:18px;color:var(--dim)}
+.tm-msg.err{color:var(--down)}
+.tm-msg.ok{color:var(--up)}
+.tm-back{display:inline-flex;align-items:center;gap:6px;margin-top:22px;color:var(--dim);text-decoration:none;font-size:14px}
+.tm-back:hover{color:var(--ink)}
+.tm-back svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2}
+.tm-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.tm-head h1{font-family:'Pixelify Sans',system-ui,sans-serif;font-weight:600;font-size:clamp(26px,3.4vw,36px);line-height:1.1;margin-top:12px;word-break:break-word}
+.tm-tools{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.tm-ppl{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;margin-top:14px}
+.tm-p{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--slate);border-radius:8px;font-size:14.5px}
+.tm-p .hd{width:28px;height:28px}
+.tm-p .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tm-p button{border:0;background:none;color:var(--faint);font-size:18px;line-height:1;cursor:pointer;padding:2px 4px}
+.tm-p button:hover{color:var(--down)}
+.tm-empty{color:var(--faint);font-size:14px;margin-top:14px}
+
+/* сетка */
+.br-wrap{margin-top:22px;overflow-x:auto;padding-bottom:10px;-webkit-overflow-scrolling:touch}
+.br{display:flex;gap:28px;min-width:max-content;align-items:stretch}
+.rd{display:flex;flex-direction:column;width:224px}
+.rd h5{font-family:'Pixelify Sans',system-ui,sans-serif;font-weight:500;font-size:15px;color:var(--dim);text-align:center;margin-bottom:10px;height:20px}
+.rd-b{display:flex;flex-direction:column;flex:1}
+.mw{flex:1;display:flex;align-items:center;position:relative;padding:6px 0}
+.rd:not(:last-child) .mw:after{content:'';position:absolute;right:-15px;width:14px;border:2px solid var(--edge);border-left:0}
+.rd:not(:last-child) .mw:nth-child(odd):after{top:50%;bottom:0;border-bottom:0;border-radius:0 6px 0 0}
+.rd:not(:last-child) .mw:nth-child(even):after{top:0;bottom:50%;border-top:0;border-radius:0 0 6px 0}
+.rd:not(:first-child) .mw:before{content:'';position:absolute;left:-15px;top:50%;width:14px;border-top:2px solid var(--edge)}
+.rd.champ .mw:before{left:-15px}
+.m{width:100%;background:var(--slate);border-radius:8px;overflow:hidden;box-shadow:inset 0 0 0 1px var(--edge)}
+.m.can{cursor:pointer}
+.m.can:hover{box-shadow:inset 0 0 0 1px var(--dia)}
+.m .s{display:flex;align-items:center;gap:8px;height:38px;padding:0 0 0 9px;font-size:14px;color:var(--dim)}
+.m .s+.s{border-top:1px solid var(--edge)}
+.m .s .n{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.m .s .sc{width:34px;align-self:stretch;display:grid;place-items:center;font-family:'Pixelify Sans',system-ui,sans-serif;font-size:17px;color:var(--faint);background:rgba(0,0,0,.14)}
+.m .s.w{color:var(--ink)}
+.m .s.w .sc{color:var(--ink);background:rgba(108,192,112,.16)}
+.m .s.l{opacity:.55}
+.m .s.tbd .n{color:var(--faint);font-style:italic}
+.m .s.tbd .hd{opacity:.25}
+.m .bye{font-size:11.5px;color:var(--faint);margin-right:8px}
+.m .edit{display:none}
+.champ .m{background:linear-gradient(180deg,rgba(var(--t1-rgb),.10),rgba(var(--t1-rgb),.02));box-shadow:inset 0 0 0 1px rgba(var(--t1-rgb),.35);text-align:center;padding:14px 10px 12px}
+.champ .m img{width:84px;height:84px;object-fit:contain;display:block;margin:0 auto 6px}
+.champ .m small{display:block;font-size:12px;color:rgb(var(--t1-rgb));letter-spacing:.06em;text-transform:uppercase;font-weight:600}
+.champ .m b{display:block;font-family:'Pixelify Sans',system-ui,sans-serif;font-weight:600;font-size:20px;color:var(--ink);margin-top:2px;word-break:break-all}
+.champ .m.wait b{color:var(--faint);font-size:16px}
+.tm-hint{font-size:13px;color:var(--faint);margin-top:8px}
+
+/* окно счёта */
+.tm-ov{position:fixed;inset:0;z-index:80;background:rgba(8,8,12,.72);display:grid;place-items:center;padding:16px}
+.tm-dlg{width:100%;max-width:420px;background:var(--slate);border-radius:14px;padding:20px;box-shadow:0 0 0 1px var(--edge),0 24px 60px rgba(0,0,0,.5)}
+.tm-dlg h4{font-family:'Pixelify Sans',system-ui,sans-serif;font-weight:600;font-size:20px}
+.tm-dlg p{color:var(--dim);font-size:13.5px;margin:4px 0 14px}
+.tm-pick{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.tm-pick button{display:flex;flex-direction:column;align-items:center;gap:8px;padding:14px 8px 10px;border-radius:10px;border:0;background:var(--ground);color:var(--ink);font:inherit;font-size:14px;cursor:pointer;box-shadow:inset 0 0 0 1px var(--edge);min-width:0}
+.tm-pick button img{width:56px;height:56px;image-rendering:pixelated}
+.tm-pick button span{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tm-pick button.on{box-shadow:inset 0 0 0 2px var(--up);background:rgba(108,192,112,.08)}
+.tm-pick button.on:after{content:'Победил';font-size:11.5px;font-weight:600;color:var(--up)}
+.tm-sc{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center;margin-top:12px}
+.tm-sc input{width:100%;padding:10px;border-radius:8px;border:1px solid var(--edge);background:var(--ground);color:var(--ink);font-family:'Pixelify Sans',system-ui,sans-serif;font-size:22px;text-align:center}
+.tm-sc input::-webkit-outer-spin-button,.tm-sc input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.tm-sc input{-moz-appearance:textfield;appearance:textfield}
+.tm-sc input:focus{outline:none;border-color:var(--dia)}
+.tm-sc i{font-style:normal;color:var(--faint);font-size:20px}
+.tm-dlg .acts{display:flex;gap:8px;justify-content:flex-end;margin-top:16px}
+@media(max-width:560px){.rd{width:196px}.br{gap:24px}.tm-list{grid-template-columns:1fr}}
+.rd.final .mw:after{top:50% !important;bottom:auto !important;height:0;border-right:0 !important;border-bottom:0 !important;border-radius:0 !important}
 </style>
 </head>
 <body>
@@ -750,6 +851,7 @@ function renderMenu(on){
     li('#/', 'Overall', IC.overall) +
     KITS.map(k => li('#/' + k.route, k.name, kitIco(k))).join('') +
     `<div class="grp">Ещё</div>` +
+    li('#/tournaments', 'Турниры', IC.cup) +
     li('#/rules', 'Правила', IC.rules) +
     li('#/results', 'Results', IC.results) +
     li('#/team', 'Команда', IC.team) +
@@ -1011,6 +1113,7 @@ const IC = {
   team: '<svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19a5.5 5.5 0 0 1 11 0"/><circle cx="17" cy="9" r="2.4"/><path d="M15.5 14.2A4.5 4.5 0 0 1 21 18.5"/></svg>',
   admin: '<svg viewBox="0 0 24 24"><path d="M12 3 4.5 6v5.5c0 4.6 3.2 8.4 7.5 9.5 4.3-1.1 7.5-4.9 7.5-9.5V6Z"/><path d="m9 12 2.2 2.2L15.5 10"/></svg>',
   kit: '<svg viewBox="0 0 24 24"><path d="M12 3 20 12 12 21 4 12Z"/></svg>',
+  cup: '<svg viewBox="0 0 24 24"><path d="M3 5h4v4H3zM3 15h4v4H3z"/><path d="M7 7h3v10H7M10 12h4"/><path d="M14 10h7v4h-7z"/></svg>',
   rules: '<svg viewBox="0 0 24 24"><path d="M6 3.5h9l3 3V20.5H6Z"/><path d="M9 9.5h6M9 13h6M9 16.5h4"/></svg>',
   results: '<svg viewBox="0 0 24 24"><path d="M4 18 9 12l3.5 3.5L20 7"/><path d="M15 7h5v5"/></svg>',
   ds: '<svg viewBox="0 0 24 24"><path d="M20.3 4.5A19.8 19.8 0 0 0 15.4 3l-.3.5c1.6.4 2.9 1 4.1 1.8a13.9 13.9 0 0 0-11.6-.4c-.4.2-.7.3-.9.4.9-.6 2.4-1.4 4.2-1.8L10.6 3C9 3.2 7 3.7 5.4 4.6 3.6 7.9 2.7 11.6 3 15.9a20 20 0 0 0 6 3l1.2-1.7c-1-.4-1.9-.8-2.7-1.4l.6-.4a14.2 14.2 0 0 0 12 0l.6.4c-.8.6-1.7 1-2.7 1.4l1.2 1.7c2.3-.7 4.4-1.8 6-3 .4-5-1.1-8.7-4.9-11.4ZM9.1 13.7c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2Zm5.8 0c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2Z"/></svg>'
@@ -1233,6 +1336,7 @@ function adminPage(){
     <div class="adm-side">
       <input id="admQ" type="search" placeholder="Найти или добавить ник" value="${esc(admQ)}" autocomplete="off" spellcheck="false">
       <div id="admList" class="adm-list">${admListHtml()}</div>
+      <a class="adm-out" href="#/tournaments" style="text-decoration:none">Турниры</a>
       <button type="button" class="adm-out" id="admBackup">Скачать копию базы</button>
       <button type="button" class="adm-out" id="admOut">Выйти из панели</button>
     </div>
@@ -1634,16 +1738,229 @@ document.addEventListener('mousemove', e => {
   mcTip.style.left = x + 'px'; mcTip.style.top = (e.clientY - 26) + 'px';
 });
 
+// ---------- Турниры ----------
+// Смотреть может любой. Вошёл в панель (#/admin) — на этих же страницах появляются кнопки управления.
+let tms = null, tmLoading = false, tmMsg = null, tmDlg = null;
+const tmAdmin = () => !!admToken && !MIRROR && !OFFLINE;
+const TM_ST = {reg: 'Регистрация', live: 'Идёт', done: 'Завершён'};
+const tmHead = (n, s = 22) => `<img class="hd" src="https://mc-heads.net/avatar/${encodeURIComponent(n)}/${s * 2}" onerror="this.onerror=null;this.src='https://mc-heads.net/avatar/MHF_Steve/${s * 2}'" alt="" loading="lazy">`;
+const tierFor = (n, fallback) => { const p = players.find(x => x.name.toLowerCase() === String(n).toLowerCase()); return (p && p.kits.diacart && p.kits.diacart.tier) || fallback || ''; };
+const tchip = t => t ? `<span class="tchip g${tierNum(t)}">${esc(t)}</span>` : '';
+const tmDate = ms => ms ? new Date(ms).toLocaleDateString('ru-RU', {day: 'numeric', month: 'long'}) : '';
+const roundName = (r, total) => { const left = total - r; return left === 1 ? 'Финал' : left === 2 ? 'Полуфинал' : '1/' + 2 ** (left - 1); };
+const plural = (n, a, b, c) => { const m = n % 10, h = n % 100; return m === 1 && h !== 11 ? a : m >= 2 && m <= 4 && (h < 12 || h > 14) ? b : c; };
+
+async function tmLoad(){
+  if(tmLoading || OFFLINE) return;
+  tmLoading = true;
+  try{
+    const data = MIRROR ? await fetchJson('tournaments.json?t=' + Date.now(), 12000)
+      : await fetchJson(API + '/api/site/tournaments', 7000).catch(() => fetchJson(MIRROR_DATA + 'tournaments.json?t=' + Date.now(), 12000));
+    const changed = JSON.stringify(data) !== JSON.stringify(tms);
+    tms = data;
+    if(changed) tmRedraw();
+  }catch(e){ if(tms === null){ tms = []; tmRedraw(); } }
+  tmLoading = false;
+}
+// не перерисовываем, пока админ что-то вводит
+function tmRedraw(){
+  if(!location.hash.startsWith('#/tournaments') || tmDlg) return;
+  const a = document.activeElement;
+  if(a && a.tagName === 'INPUT' && a.closest('#app') && a.value) return;
+  router();
+}
+setInterval(() => { if(location.hash.startsWith('#/tournaments') && !document.hidden) tmLoad(); }, 15000);
+
+async function tmApi(path, body, okText){
+  try{
+    const r = await admApi('tournament/' + path, body);
+    tms = r.list;
+    tmMsg = okText ? {ok: true, text: okText} : null;
+    return r;
+  }catch(err){
+    tmMsg = {ok: false, text: err.message};
+    return null;
+  }finally{
+    tmDlg = null;
+    router();
+  }
+}
+
+function tournamentsPage(id){
+  const back = `<a href="#/tournaments" class="tm-back"><svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>Все турниры</a>`;
+  if(OFFLINE) return `<h1 class="ph">${IC.cup}Турниры</h1>` + nores('Турниры доступны на основном сайте.');
+  if(tms === null) return `<h1 class="ph">${IC.cup}Турниры</h1>` + nores('Загрузка турниров…');
+  if(id){
+    const t = tms.find(x => x.id === id);
+    return t ? back + tmView(t) : back + nores('Турнир не найден.');
+  }
+  const msg = tmMsg ? `<div class="tm-msg ${tmMsg.ok ? 'ok' : 'err'}">${esc(tmMsg.text)}</div>` : '';
+  const form = tmAdmin() ? `<div class="tm-form">
+      <h4>Новый турнир</h4>
+      <div class="rowf">
+        <input id="tmCreator" placeholder="Кто создаёт - ник или Discord ID" maxlength="40" autocomplete="off">
+        <input id="tmName" placeholder="Название (необязательно)" maxlength="60" autocomplete="off">
+        <button type="button" class="tbtn" id="tmCreate">Создать</button>
+      </div>${msg}
+    </div>` : '';
+  const cards = tms.map(t => {
+    const n = t.players.length;
+    return `<a href="#/tournaments/${t.id}" class="tm-card">
+      <span class="tm-st ${t.status}">${TM_ST[t.status]}</span>
+      <h3>${esc(t.name)}</h3>
+      <div class="who">Создал ${esc(t.creator)} · ${tmDate(t.createdAt)}</div>
+      <div class="tm-heads">${t.players.slice(0, 8).map(p => `<img src="https://mc-heads.net/avatar/${encodeURIComponent(p.name)}/52" alt="" loading="lazy">`).join('')}<span>${n} ${plural(n, 'участник', 'участника', 'участников')}</span></div>
+      ${t.winner ? `<div class="tm-win">${tmHead(t.winner)}Победитель <b>${esc(t.winner)}</b></div>` : ''}
+    </a>`;
+  }).join('');
+  return `<h1 class="ph">${IC.cup}Турниры</h1>` + form +
+    (cards ? `<div class="tm-list">${cards}</div>` : nores(tmAdmin() ? 'Турниров пока нет - создай первый.' : 'Турниров пока нет.'));
+}
+
+function tmView(t){
+  const adm = tmAdmin();
+  const msg = tmMsg ? `<div class="tm-msg ${tmMsg.ok ? 'ok' : 'err'}">${esc(tmMsg.text)}</div>` : '';
+  const n = t.players.length;
+  let html = `<div class="tm-head"><div>
+      <span class="tm-st ${t.status}">${TM_ST[t.status]}</span>
+      <h1>${esc(t.name)}</h1>
+      <div class="tm-sub">Создал ${esc(t.creator)} · ${tmDate(t.createdAt)} · ${n} ${plural(n, 'участник', 'участника', 'участников')}</div>
+    </div>
+    ${adm ? `<div class="tm-tools">${t.status === 'reg' ? `<button type="button" class="tbtn" data-tm="start" ${n < 2 ? 'disabled' : ''}>Начать турнир</button>` : ''}<button type="button" class="tbtn danger" data-tm="delete">Удалить</button></div>` : ''}
+  </div>`;
+
+  if(t.status === 'reg'){
+    if(adm){
+      const taken = new Set(t.players.map(p => p.name.toLowerCase()));
+      const opts = sortByPts(players.filter(p => p.kits.diacart && p.kits.diacart.tier && !taken.has(p.name.toLowerCase())).slice())
+        .map(p => `<option value="${esc(p.name)}">${esc(p.kits.diacart.tier)}</option>`).join('');
+      html += `<div class="tm-form">
+        <h4>Добавить участника</h4>
+        <div class="rowf">
+          <input id="tmNick" list="tmOpts" placeholder="Ник игрока с тиром" autocomplete="off" spellcheck="false">
+          <datalist id="tmOpts">${opts}</datalist>
+          <button type="button" class="tbtn" data-tm="add">Добавить</button>
+        </div>${msg}
+        <div class="tm-hint">Добавить можно только игроков из тир-листа. Сетку по тирам бот соберёт сам, когда нажмёшь «Начать турнир».</div>
+      </div>`;
+    } else if(msg) html += msg;
+    html += `<div class="sh">Участники</div>` + (n
+      ? `<div class="tm-ppl">${t.players.map(p => `<div class="tm-p">${tmHead(p.name, 28)}<span class="nm">${esc(p.name)}</span>${tchip(tierFor(p.name, p.tier))}${adm ? `<button type="button" data-tm="remove" data-nick="${esc(p.name)}" title="Убрать">×</button>` : ''}</div>`).join('')}</div>`
+      : `<div class="tm-empty">Пока никого. ${adm ? 'Добавь участников выше.' : 'Регистрация открыта.'}</div>`);
+    return html;
+  }
+
+  if(msg) html += msg;
+  if(adm && t.status !== 'reg') html += `<div class="tm-hint">Нажми на матч, чтобы записать счёт. Победитель сам пройдёт дальше.</div>`;
+  html += tmBracket(t, adm);
+  return html;
+}
+
+function tmBracket(t, adm){
+  const total = t.rounds.length;
+  const side = (m, k, r) => {
+    const name = m[k], sc = m[k === 'a' ? 'sa' : 'sb'];
+    if(!name) return `<div class="s tbd">${tmHead(STEVE)}<span class="n">${r === 0 ? 'Пропуск' : 'Ожидается'}</span></div>`;
+    const cls = m.w ? (m.w === k ? 'w' : 'l') : '';
+    return `<div class="s ${cls}">${tmHead(name)}<span class="n">${esc(name)}</span>${tchip(tierFor(name))}<span class="sc">${sc == null ? '' : sc}</span></div>`;
+  };
+  const cols = t.rounds.map((round, r) => `<div class="rd${r === total - 1 ? ' final' : ''}">
+      <h5>${roundName(r, total)}</h5>
+      <div class="rd-b">${round.map((m, i) => {
+        const can = adm && m.a && m.b && !m.bye;
+        return `<div class="mw"><div class="m${can ? ' can' : ''}"${can ? ` data-match="${r}:${i}"` : ''}>${side(m, 'a', r)}${side(m, 'b', r)}</div></div>`;
+      }).join('')}</div>
+    </div>`).join('');
+  const champ = `<div class="rd champ"><h5>Победитель</h5><div class="rd-b"><div class="mw"><div class="m${t.winner ? '' : ' wait'}">
+      ${t.winner ? `<img src="${bust(t.winner)}" data-skin="bust" data-name="${esc(t.winner)}" alt=""><small>Чемпион</small><b>${esc(t.winner)}</b>` : `<small>Чемпион</small><b>Ещё не определён</b>`}
+    </div></div></div></div>`;
+  return `<div class="br-wrap"><div class="br">${cols}${champ}</div></div>`;
+}
+
+function tmDialog(t, r, i){
+  const m = t.rounds[r][i];
+  tmDlg = {t, r, i, w: m.w || null};
+  const ov = document.createElement('div');
+  ov.className = 'tm-ov';
+  ov.innerHTML = `<div class="tm-dlg" role="dialog">
+    <h4>${roundName(r, t.rounds.length)}</h4>
+    <p>Выбери, кто выиграл, и запиши счёт.</p>
+    <div class="tm-pick">
+      <button type="button" data-w="a" class="${m.w === 'a' ? 'on' : ''}"><img src="https://mc-heads.net/avatar/${encodeURIComponent(m.a)}/112" alt=""><span>${esc(m.a)}</span></button>
+      <button type="button" data-w="b" class="${m.w === 'b' ? 'on' : ''}"><img src="https://mc-heads.net/avatar/${encodeURIComponent(m.b)}/112" alt=""><span>${esc(m.b)}</span></button>
+    </div>
+    <div class="tm-sc"><input id="tmSa" type="number" min="0" max="99" inputmode="numeric" value="${m.sa ?? ''}" placeholder="0"><i>:</i><input id="tmSb" type="number" min="0" max="99" inputmode="numeric" value="${m.sb ?? ''}" placeholder="0"></div>
+    <div class="tm-msg err" id="tmDlgMsg"></div>
+    <div class="acts"><button type="button" class="tbtn ghost" data-x>Отмена</button><button type="button" class="tbtn" data-ok>Сохранить</button></div>
+  </div>`;
+  document.body.appendChild(ov);
+  const close = () => { ov.remove(); tmDlg = null; document.removeEventListener('keydown', onKey); };
+  const onKey = e => { if(e.key === 'Escape') close(); if(e.key === 'Enter') ov.querySelector('[data-ok]').click(); };
+  document.addEventListener('keydown', onKey);
+  ov.addEventListener('click', e => {
+    if(e.target === ov || e.target.closest('[data-x]')) return close();
+    const pick = e.target.closest('[data-w]');
+    if(pick){
+      tmDlg.w = pick.dataset.w;
+      ov.querySelectorAll('[data-w]').forEach(b => b.classList.toggle('on', b === pick));
+      return;
+    }
+    if(e.target.closest('[data-ok]')){
+      const sa = ov.querySelector('#tmSa').value, sb = ov.querySelector('#tmSb').value, out = ov.querySelector('#tmDlgMsg');
+      if(!tmDlg.w){ out.textContent = 'Выбери, кто выиграл'; return; }
+      if(sa === '' || sb === ''){ out.textContent = 'Впиши счёт'; return; }
+      if((tmDlg.w === 'a') !== (+sa > +sb)){ out.textContent = 'У победителя счёт должен быть больше'; return; }
+      const winner = m[tmDlg.w];
+      document.removeEventListener('keydown', onKey);
+      ov.remove();
+      tmApi('result', {id: t.id, r, m: i, w: tmDlg.w, sa: +sa, sb: +sb}, `${winner} проходит дальше (${sa}:${sb})`);
+    }
+  });
+  setTimeout(() => ov.querySelector('#tmSa').focus(), 30);
+}
+
+function wireTournaments(id){
+  if(tms === null) tmLoad();
+  if(!tmAdmin()) return;
+  const t = id && tms && tms.find(x => x.id === id);
+  const create = document.getElementById('tmCreate');
+  if(create){
+    const go = () => {
+      const creator = document.getElementById('tmCreator').value.trim(), name = document.getElementById('tmName').value.trim();
+      if(!creator){ tmMsg = {ok: false, text: 'Укажи, кто создаёт турнир'}; router(); return; }
+      tmApi('create', {creator, name}).then(r => { if(r && r.list[0]){ tmMsg = null; location.hash = '#/tournaments/' + r.list[0].id; } });
+    };
+    create.addEventListener('click', go);
+    document.querySelectorAll('#tmCreator,#tmName').forEach(i => i.addEventListener('keydown', e => { if(e.key === 'Enter') go(); }));
+  }
+  if(!t) return;
+  const nickIn = document.getElementById('tmNick');
+  const add = () => { const nick = nickIn.value.trim(); if(nick) tmApi('player', {id: t.id, nickname: nick}, `${nick} добавлен`).then(() => { const i = document.getElementById('tmNick'); if(i) i.focus(); }); };
+  if(nickIn){ nickIn.addEventListener('keydown', e => { if(e.key === 'Enter') add(); }); }
+  app.querySelectorAll('[data-tm]').forEach(b => b.addEventListener('click', () => {
+    const a = b.dataset.tm;
+    if(a === 'add') add();
+    if(a === 'remove') tmApi('player', {id: t.id, nickname: b.dataset.nick, remove: true}, `${b.dataset.nick} убран`);
+    if(a === 'start' && confirm(`Начать «${t.name}»? После старта участников менять нельзя.`)) tmApi('start', {id: t.id}, 'Турнир начат, сетка готова');
+    if(a === 'delete' && confirm(`Удалить турнир «${t.name}»? Это нельзя отменить.`)) tmApi('delete', {id: t.id}).then(r => { if(r) location.hash = '#/tournaments'; });
+  }));
+  app.querySelectorAll('[data-match]').forEach(el => el.addEventListener('click', () => {
+    const [r, i] = el.dataset.match.split(':').map(Number);
+    tmDialog(t, r, i);
+  }));
+}
+
 function router(){
   const parts = (location.hash || '#/').split('/');
   const seg = parts[1] || '', arg = parts[2] || '';
-  const menuFor = {rules:'#/rules', results:'#/results', me:'#/me', player:'', team:'#/team', admin:'#/admin'};
+  const menuFor = {rules:'#/rules', tournaments:'#/tournaments', results:'#/results', me:'#/me', player:'', team:'#/team', admin:'#/admin'};
   KITS.forEach(k => { menuFor[k.route] = '#/' + k.route; });
   const kit = KITS.find(k => k.route === seg);
   const on = seg in menuFor ? menuFor[seg] : '#/';
 
   let html = '';
   if(seg === 'rules')                html = rulesPage(arg);
+  else if(seg === 'tournaments')     html = tournamentsPage(decodeURIComponent(arg));
   else if(!ready)                     html = '<div class="nores">Загрузка тир-листа…</div>';
   else if(loadFailed && seg !== 'me') html = nores('Не удалось загрузить тир-лист. Обнови страницу — если не помогает, возможно, провайдер плохо открывает сайт: попробуй другую сеть или VPN.');
   else if(kit)                        html = tierList(kit);
@@ -1663,6 +1980,7 @@ function router(){
   startProfileFx();
   if(seg === 'team') loadTeam();
   if(seg === 'admin') wireAdmin();
+  if(seg === 'tournaments') wireTournaments(decodeURIComponent(arg));
 }
 
 // Живой фон профиля: звёзды, частицы-завитки (как эффекты зелий в Minecraft), искры/души и летучие мыши
@@ -1836,7 +2154,7 @@ async function load(){
   players = data;
   loadFailed = false;
   // на странице профиля не перерисовываем — там может быть недописанный ник в поле
-  if(!ready || (changed && !/^#\/(me|admin)/.test(location.hash))){ ready = true; router(); }
+  if(!ready || (changed && !/^#\/(me|admin|tournaments)/.test(location.hash))){ ready = true; router(); }
 }
 load();
 setInterval(() => { if(!OFFLINE && !document.hidden) load(); }, 30000);
