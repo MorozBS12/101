@@ -1353,7 +1353,7 @@ let admQ = '';
 let admMsg = null;
 
 async function admApi(path, body){
-  const r = await fetch(API + '/api/admin/' + path, {
+  const r = await fetch((MIRROR ? 'https://101tiers.xyz' : API) + '/api/admin/' + path, {
     method: body ? 'POST' : 'GET',
     headers: Object.assign({'Content-Type': 'application/json'}, admToken ? {Authorization: 'Bearer ' + admToken} : {}),
     body: body ? JSON.stringify(body) : undefined,
@@ -1366,7 +1366,7 @@ async function admApi(path, body){
 
 function adminPage(){
   const head = `<h1 class="ph">${IC.admin}Панель</h1>`;
-  if(MIRROR || OFFLINE) return head + nores('Страница не найдена.');
+  if(OFFLINE) return head + nores('Страница не найдена.');
   if(!admToken){
     if(admEnabled === false) return head + nores('Панель выключена. Добавь переменную <b>ADMIN_PASSWORD</b> в Railway → Variables.');
     return head + `<div class="bind adm-login">
@@ -1787,7 +1787,7 @@ document.addEventListener('mousemove', e => {
 // ---------- Турниры ----------
 // Смотреть может любой. Вошёл в панель (#/admin) — на этих же страницах появляются кнопки управления.
 let tms = null, tmLoading = false, tmMsg = null, tmDlg = null;
-const tmAdmin = () => !!admToken && !MIRROR && !OFFLINE;
+const tmAdmin = () => !!admToken && !OFFLINE;
 const TM_ST = {reg: 'Регистрация', live: 'Идёт', done: 'Завершён'};
 const TM_TIERS = ['LT5','HT5','LT4','HT4','LT3','HT3','LT2','HT2','LT1','HT1'];
 const tmTiersText = t => t.tiers && t.tiers.length ? TM_TIERS.filter(x => t.tiers.includes(x)).join(', ') : 'все тиры';
