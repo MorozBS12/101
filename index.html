@@ -605,6 +605,9 @@ img[data-skin]:not([data-ok]){animation:pulse 1.1s ease-in-out infinite;border-r
 .tm-p button:hover{color:var(--down)}
 .tm-empty{color:var(--faint);font-size:14px;margin-top:14px}
 
+.tm-tiers{display:flex;gap:6px;flex-wrap:wrap}
+.tm-tiers .tchip{border:0;cursor:pointer;font-size:13px;padding:7px 9px 6px;opacity:.3}
+.tm-tiers .tchip.on{opacity:1}
 /* сетка */
 .br-wrap{margin-top:22px;overflow-x:auto;padding-bottom:10px;-webkit-overflow-scrolling:touch}
 .br{display:flex;gap:28px;min-width:max-content;align-items:stretch}
@@ -1786,6 +1789,8 @@ document.addEventListener('mousemove', e => {
 let tms = null, tmLoading = false, tmMsg = null, tmDlg = null;
 const tmAdmin = () => !!admToken && !MIRROR && !OFFLINE;
 const TM_ST = {reg: 'Регистрация', live: 'Идёт', done: 'Завершён'};
+const TM_TIERS = ['LT5','HT5','LT4','HT4','LT3','HT3','LT2','HT2','LT1','HT1'];
+const tmTiersText = t => t.tiers && t.tiers.length ? TM_TIERS.filter(x => t.tiers.includes(x)).join(', ') : 'все тиры';
 const tmHead = (n, s = 22) => `<img class="hd" src="https://mc-heads.net/avatar/${encodeURIComponent(n)}/${s * 2}" onerror="this.onerror=null;this.src='https://mc-heads.net/avatar/MHF_Steve/${s * 2}'" alt="" loading="lazy">`;
 const tierFor = (n, fallback) => { const p = players.find(x => x.name.toLowerCase() === String(n).toLowerCase()); return (p && p.kits.diacart && p.kits.diacart.tier) || fallback || ''; };
 const tchip = t => t ? `<span class="tchip g${tierNum(t)}">${esc(t)}</span>` : '';
@@ -1868,6 +1873,7 @@ function tmView(t){
       <span class="tm-st ${t.status}">${TM_ST[t.status]}</span>
       <h1>${esc(t.name)}</h1>
       <div class="tm-sub">Создал ${esc(t.creator)} · ${tmDate(t.createdAt)} · ${n} ${plural(n, 'участник', 'участника', 'участников')}</div>
+      <div class="tm-sub">Участвуют: ${tmTiersText(t)}</div>
     </div>
     ${adm ? `<div class="tm-tools">${t.status === 'reg' ? `<button type="button" class="tbtn" data-tm="start" ${n < 2 ? 'disabled' : ''}>Начать турнир</button>` : ''}<button type="button" class="tbtn danger" data-tm="delete">Удалить</button></div>` : ''}
   </div>`;
@@ -1884,6 +1890,9 @@ function tmView(t){
           <datalist id="tmOpts">${opts}</datalist>
           <button type="button" class="tbtn" data-tm="add">Добавить</button>
         </div>${msg}
+        <h4 style="margin-top:16px">Кто может участвовать</h4>
+        <div class="tm-tiers">${TM_TIERS.map(x => `<button type="button" class="tchip g${tierNum(x)}${!t.tiers || !t.tiers.length || t.tiers.includes(x) ? ' on' : ''}" data-tier="${x}">${x}</button>`).join('')}</div>
+        <div class="tm-hint">Нажми на тир, чтобы убрать или вернуть его. В Discord команда /tournament публикует запись с кнопкой «Участвую».</div>
         <div class="tm-hint">Добавить можно только игроков из тир-листа. Сетку по тирам бот соберёт сам, когда нажмёшь «Начать турнир».</div>
       </div>`;
     } else if(msg) html += msg;
@@ -1986,6 +1995,12 @@ function wireTournaments(id){
     if(a === 'remove') tmApi('player', {id: t.id, nickname: b.dataset.nick, remove: true}, `${b.dataset.nick} убран`);
     if(a === 'start' && confirm(`Начать «${t.name}»? После старта участников менять нельзя.`)) tmApi('start', {id: t.id}, 'Турнир начат, сетка готова');
     if(a === 'delete' && confirm(`Удалить турнир «${t.name}»? Это нельзя отменить.`)) tmApi('delete', {id: t.id}).then(r => { if(r) location.hash = '#/tournaments'; });
+  }));
+  app.querySelectorAll('[data-tier]').forEach(b => b.addEventListener('click', () => {
+    const cur = new Set(t.tiers && t.tiers.length ? t.tiers : TM_TIERS);
+    cur.has(b.dataset.tier) ? cur.delete(b.dataset.tier) : cur.add(b.dataset.tier);
+    if(!cur.size){ tmMsg = {ok: false, text: 'Оставь хотя бы один тир'}; router(); return; }
+    tmApi('tiers', {id: t.id, tiers: [...cur]});
   }));
   app.querySelectorAll('[data-match]').forEach(el => el.addEventListener('click', () => {
     const [r, i] = el.dataset.match.split(':').map(Number);
