@@ -1568,7 +1568,7 @@ async function admDo(fn, okText){
 }
 
 async function wireAdmin(){
-  if(MIRROR || OFFLINE) return;
+  if(OFFLINE) return;
   if(!admToken && admEnabled === null){
     try{ admEnabled = (await admApi('status')).enabled; }catch(e){ admEnabled = true; }
     if(admEnabled === false && location.hash.startsWith('#/admin')) router();
