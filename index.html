@@ -2261,22 +2261,27 @@ async function shopLoad(){
   if(location.hash.startsWith('#/shop')) router();
 }
 function shopTabs(tab){
-  const t = [['', 'Магазин'], ['games', 'Игры'], ['balance', 'Баланс']];
+  const t = [['', 'Магазин'], ['case', 'Кейс'], ['games', 'Игры'], ['predict', 'Прогнозы'], ['season', 'Сезон'], ['balance', 'Баланс']];
   return `<nav class="rtabs">${t.map(([k, n]) => `<a href="#/shop${k ? '/' + k : ''}" class="${k === tab ? 'on' : ''}">${n}</a>`).join('')}</nav>`;
 }
 function shopPage(tab){
-  tab = tab === 'games' || tab === 'balance' ? tab : '';
+  tab = ['games', 'balance', 'case', 'predict', 'season'].includes(tab) ? tab : '';
   const head = `<h1 class="ph">Магазин</h1>${shopTabs(tab)}`;
   if(tab === 'games') return head + gamesBody(game && game.kind || 'tier');
   if(!shop){ shopLoad(); return head + '<div class="nores">Загрузка…</div>'; }
   if(shop.error) return head + nores('Магазин не загрузился. Обнови страницу.');
   const u = shop.me;
   if(tab === 'balance') return head + balanceBody(u);
-  const owned = new Set(u ? u.owned : []), eq = u ? u.equipped : {};
+  if(tab === 'case') return head + caseBody(u);
+  if(tab === 'predict') return head + predictBody(u);
+  if(tab === 'season') return head + seasonBody(u);
+  const owned = new Set(u ? u.owned : []), eq = u ? u.equipped : {}, temp = u && u.temp || {};
   const myName = (u && u.mc) || 'Steve';
   const btn = (type, it) => {
     if(!u) return `<a class="btn2" href="#/login">Войти, чтобы купить</a>`;
-    if(!owned.has(type + ':' + it.key)) return `<button type="button" class="btn1" data-buy="${type}" data-key="${it.key}"${u.coins < it.price ? ' disabled' : ''}>Купить за ${it.price}</button>`;
+    const tk = type + ':' + it.key, tmp = !owned.has(tk) && temp[tk] > Date.now();
+    if(tmp && eq[type] !== it.key) return `<button type="button" class="btn2" data-eq="${type}" data-key="${it.key}">Надеть (из кейса, ${Math.ceil((temp[tk] - Date.now()) / 3600000)} ч)</button>`;
+    if(!owned.has(tk) && !tmp) return `<button type="button" class="btn1" data-buy="${type}" data-key="${it.key}"${u.coins < it.price ? ' disabled' : ''}>Купить за ${it.price}</button>`;
     return eq[type] === it.key ? `<button type="button" class="btn2" data-eq="${type}" data-key="">Снять</button>` : `<button type="button" class="btn2" data-eq="${type}" data-key="${it.key}">Надеть</button>`;
   };
   const card = (type, it, pv) => `<div class="shop-it">${pv}<div class="row2"><b>${esc(it.name)}</b>${u && eq[type] === it.key ? '<span class="on">Надето</span>' : `<span class="coins">${coinImg()}${it.price}</span>`}</div>${btn(type, it)}</div>`;
@@ -2288,10 +2293,65 @@ function shopPage(tab){
   <h2 class="sh">Фон профиля</h2><div class="shop-grid">${bgs}</div>
   <h2 class="sh">Рамка вокруг головы</h2><div class="shop-grid">${frames}</div>`;
 }
+let caseRes = null, caseBusy = false;
+function caseBody(u){
+  const res = caseRes ? `<div class="gm" style="margin-top:16px"><h2>${caseRes.coins && !caseRes.dup ? `+${caseRes.coins} монеток` : caseRes.dup ? `${esc(caseRes.dup)} уже есть` : esc(caseRes.name)}</h2>
+    <p>${caseRes.dup ? `Вместо него +${caseRes.coins} монеток` : caseRes.coins ? 'Монетки уже на балансе' : caseRes.perm ? 'Навсегда! Уже в магазине у тебя' : caseRes.err ? '' : 'На 1 день. Надень во вкладке «Магазин»'}</p></div>` : '';
+  return `<div class="wallet"><div class="c3d"><div class="spin">${[0,1,2,3,4,5].map(i => `<img class="${i && i < 5 ? 'e' : ''}" src="${COIN}" alt="" style="transform:translateZ(${(i - 2.5) * 1.6}px)${i === 5 ? ' rotateY(180deg)' : ''}">`).join('')}</div></div>
+    <div><small>Кейс</small><div class="big">300</div></div>
+    <button type="button" class="btn1" id="caseGo" style="margin-left:auto"${u.coins < 300 || caseBusy ? ' disabled' : ''}>${coinImg()} Открыть за 300</button></div>
+  ${res}
+  <h2 class="sh">Что может выпасть</h2><div class="log">
+    <div><span>Градиент ника на 1 день</span><span>45%</span></div>
+    <div><span>Рамка на 1 день</span><span>30%</span></div>
+    <div><span>Фон профиля на 1 день</span><span>15%</span></div>
+    <div><span>150-550 монеток</span><span>8%</span></div>
+    <div><span>Градиент ника навсегда</span><span>2%</span></div>
+  </div>`;
+}
+let pred = null, predMsg = '';
+function predictBody(u){
+  if(!pred){ fetch(API + '/api/predict', {credentials:'include'}).then(r => r.json()).then(d => { pred = d; if(location.hash.startsWith('#/shop/predict')) router(); }).catch(() => {}); return '<div class="nores">Загрузка…</div>'; }
+  const rows = (pred.open || []).map(o => {
+    const my = pred.mine[`${o.t}:${o.r}:${o.m}`];
+    return `<div class="shop-it" style="margin-bottom:10px"><div class="row2"><b>${esc(o.a)} - ${esc(o.b)}</b><span class="on">${esc(o.round)}</span></div><small style="color:var(--dim)">${esc(o.name)}</small>
+      ${my ? `<p>Твой прогноз: <b>${esc(my.side === 'a' ? o.a : o.b)}</b>, ставка ${my.amount}</p>` : `<div style="display:flex;gap:8px;flex-wrap:wrap">
+        <input type="number" min="${pred.min}" max="${pred.max}" value="50" data-amt="${o.t}:${o.r}:${o.m}" style="width:90px;padding:10px;border-radius:8px;border:1px solid var(--edge);background:var(--slate-2);color:var(--ink)">
+        <button type="button" class="btn2" data-bet="a" data-k="${o.t}:${o.r}:${o.m}">${esc(o.a)}</button><button type="button" class="btn2" data-bet="b" data-k="${o.t}:${o.r}:${o.m}">${esc(o.b)}</button></div>`}</div>`;
+  }).join('');
+  return `${predMsg ? `<div class="msg" style="margin:10px 0">${esc(predMsg)}</div>` : ''}
+  <p style="color:var(--dim);margin-top:14px">Угадай, кто выиграет матч в идущем турнире. Ставка от ${pred.min} до ${pred.max} монеток, угадал - получаешь вдвое больше.</p>
+  <div style="max-width:620px;margin-top:12px">${rows || nores('Сейчас нет матчей для прогноза. Они появятся, когда начнётся турнир.')}</div>`;
+}
+let season = null;
+function seasonBody(u){
+  if(!season){ fetch(API + '/api/season').then(r => r.json()).then(d => { season = d; if(location.hash.startsWith('#/shop/season')) router(); }).catch(() => {}); return '<div class="nores">Загрузка…</div>'; }
+  const mon = new Date(season.month + '-15').toLocaleDateString('ru-RU', {month:'long'}) + ' ' + season.month.slice(0, 4);
+  const rows = season.top.map((t, i) => `<div><span>${i + 1}. ${esc(t.name)}</span><span class="coins">${coinImg()}${t.earned}</span></div>`).join('') || '<div><span>Пока никто ничего не заработал</span></div>';
+  return `<div class="wallet"><div><small>Сезон</small><div class="big" style="text-transform:capitalize">${esc(mon)}</div></div><div><small>Ты заработал</small><div class="big">${u.season || 0}</div></div></div>
+  <p style="color:var(--dim);margin-top:14px">Кто заработает больше всех монеток за месяц, тот в топе. В конце месяца топ-3 получают <b style="color:#ff5d73">Сезонную рамку</b> навсегда, её нельзя купить.</p>
+  <h2 class="sh">Топ месяца</h2><div class="log">${rows}</div>`;
+}
+document.addEventListener('click', async e => {
+  if(e.target.closest('#caseGo')){
+    caseBusy = true; router();
+    try{ const r = await fetch(API + '/api/case', {method:'POST', credentials:'include'}); const d = await r.json(); if(!r.ok) throw new Error(d.error); caseRes = d; shop.me = d.me; me = {...me, ...d.me}; renderAuth(); }
+    catch(err){ caseRes = {name: err.message, coins: 0, err: true}; }
+    caseBusy = false; router(); return;
+  }
+  const b = e.target.closest('[data-bet]');
+  if(b){
+    const [t, r, m] = b.dataset.k.split(':'), amt = document.querySelector(`[data-amt="${b.dataset.k}"]`).value;
+    try{ const res = await fetch(API + '/api/predict', {method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({t, r: +r, m: +m, side: b.dataset.bet, amount: +amt})}); const d = await res.json(); if(!res.ok) throw new Error(d.error); predMsg = 'Прогноз принят'; me = {...me, ...d.me}; renderAuth(); pred = null; }
+    catch(err){ predMsg = err.message; }
+    router();
+  }
+});
+
 function balanceBody(u){
   if(!u) return `<div class="lgn"><p>Войди, чтобы копить монетки.</p><a class="btn1" href="#/login">${IC.ds} Войти через Discord</a></div>`;
   const rows = (u.log || []).map(l => `<div><span>${esc(l.r)}</span><span class="${l.a > 0 ? 'pl' : 'mi'}">${l.a > 0 ? '+' : ''}${l.a}</span></div>`).join('') || '<div><span>Пока пусто</span></div>';
-  const earn = [['Тест', '+5, тир вырос +10'], ['Тестеру за тест', '+5'], ['Еженедельный турнир', '150 / 90 / 50, участие 10'], ['Вход на сайт', '+5, 7-й день +10'], ['Угадай тир', '+5'], ['Угадай игрока', '+10']]
+  const earn = [['Тест', '+5, тир вырос +10'], ['Тестеру за тест', '+5'], ['Еженедельный турнир', '150 / 90 / 50, участие 10'], ['Вход на сайт', '+5, 7-й день +10'], ['Угадай тир', '+5'], ['Угадай игрока', '+10'], ['Прогноз угадан', 'ставка x2']]
     .map(([a, b]) => `<div><span>${a}</span><span>${b}</span></div>`).join('');
   return `<div class="wallet"><div class="c3d"><div class="spin">${[0,1,2,3,4,5].map(i => `<img class="${i && i < 5 ? 'e' : ''}" src="${COIN}" alt="" style="transform:translateZ(${(i - 2.5) * 1.6}px)${i === 5 ? ' rotateY(180deg)' : ''}">`).join('')}</div></div>
     <div><small>Баланс</small><div class="big">${u.coins}</div></div></div>
