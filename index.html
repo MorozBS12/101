@@ -1018,7 +1018,7 @@ function renderMenu(on){
     KITS.map(k => li('#/' + k.route, k.name, kitIco(k))).join('') +
     `<div class="grp">Ещё</div>` +
     li('#/tournaments', 'Турниры', IC.cup) +
-    li('#/shop', 'Магазин', IC.shop) +
+    (me ? li('#/shop', 'Магазин', IC.shop) : '') +
     li('#/rules', 'Правила', IC.rules) +
     li('#/results', 'Results', IC.results) +
     li('#/team', 'Команда', IC.team) +
@@ -2385,7 +2385,7 @@ function router(){
   if(seg === 'rules')                html = rulesPage(arg);
   else if(seg === 'tournaments')     html = tournamentsPage(decodeURIComponent(arg));
   else if(seg === 'login')           html = loginPage();
-  else if(seg === 'shop')            html = shopPage(arg);
+  else if(seg === 'shop')            html = me ? shopPage(arg) : loginPage();
   else if(!ready)                     html = '<div class="nores">Загрузка тир-листа…</div>';
   else if(loadFailed && seg !== 'me') html = nores('Не удалось загрузить тир-лист. Обнови страницу — если не помогает, возможно, провайдер плохо открывает сайт: попробуй другую сеть или VPN.');
   else if(kit)                        html = tierList(kit);
