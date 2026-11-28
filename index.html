@@ -1015,7 +1015,7 @@ function renderMenu(on){
     li('#/team', 'Команда', IC.team) +
     li(DISCORD, 'Discord', IC.ds, 'ds') +
     // панель не показываем в меню — вход только по прямой ссылке #/admin
-    (on === '#/admin' ? li('#/admin', 'Панель', IC.admin) : '');
+    ((on === '#/admin' || (me && me.admin)) ? li('#/admin', 'Панель', IC.admin) : '');
 }
 
 function feedRows(list){
@@ -1386,7 +1386,8 @@ async function loadMe(){
     me = r.ok ? await r.json() : null;
   }catch(e){ me = null; }
   renderAuth();
-  if(/^#\/(me|games|shop|login)/.test(location.hash)){ if(location.hash.startsWith('#/shop')) shop = null; router(); }
+  renderMenu((location.hash || '#/').split('/').slice(0, 2).join('/') || '#/');
+  if(/^#\/(me|games|shop|login|admin)/.test(location.hash)){ if(location.hash.startsWith('#/shop')) shop = null; router(); }
 }
 
 function renderAuth(){
@@ -1405,6 +1406,7 @@ function renderAuth(){
       <a href="#/me"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"/><path d="M5 20a7 7 0 0 1 14 0"/></svg>Мой профиль</a>
       <a href="#/shop">${IC.shop}Магазин</a>
       <a href="#/games">${IC.games}Игры</a>
+      ${me.admin ? `<a href="#/admin">${IC.admin}Панель</a>` : ''}
       <button type="button" id="logout"><svg viewBox="0 0 24 24"><path d="M10 5H5v14h5M15 8l4 4-4 4M19 12H9"/></svg>Выйти</button>
     </div>
   </div>`;
@@ -1532,9 +1534,53 @@ async function admApi(path, body){
   return data;
 }
 
+let ssoBusy = false;
+async function admSso(){
+  if(ssoBusy) return; ssoBusy = true;
+  try{
+    const r = await fetch(API + '/api/admin/sso', {method:'POST', credentials:'include'});
+    const d = await r.json();
+    if(r.ok){ admToken = d.token; store.set('adm', admToken); }
+    else if(me) me.admin = false;
+  }catch(e){ if(me) me.admin = false; }
+  ssoBusy = false;
+  if(location.hash.startsWith('#/admin')) router();
+}
+
+let coinList = null, coinMsg = null;
+function coinsHtml(){
+  if(!coinList){ admApi('coins').then(l => { coinList = l; admRefresh(); }).catch(e => { coinList = []; coinMsg = {ok:false, text:e.message}; admRefresh(); }); }
+  const msg = coinMsg ? `<div class="msg ${coinMsg.ok ? 'ok' : 'err'}">${esc(coinMsg.text)}</div>` : '';
+  const rows = (coinList || []).map(b => `<div><span>${esc(b.username || b.id)}${b.mc ? ' · ' + esc(b.mc) : ''}</span><span class="coins"><i></i>${b.coins}</span></div>`).join('') || '<div><span>Пока ни у кого нет монеток</span></div>';
+  return `<h2 class="sh" style="margin-top:0">Монетки</h2>
+  <div class="bind" style="margin-top:0">
+    <p>Ник из тир-листа, ник на сайте или Discord ID. Минус - списать.</p>
+    <div class="rowf"><input id="coinWho" placeholder="Кому" autocomplete="off" spellcheck="false"><input id="coinAmt" type="number" placeholder="Сколько" style="max-width:130px"></div>
+    <div class="rowf" style="margin-top:8px"><input id="coinWhy" placeholder="Причина (необязательно)" maxlength="80"><button type="button" id="coinGo">Начислить</button>${me ? `<button type="button" id="coinMe">Себе</button>` : ''}</div>
+    ${msg}
+  </div>
+  <h2 class="sh">У кого сколько</h2><div class="log">${rows}</div>`;
+}
+document.addEventListener('click', async e => {
+  if(e.target.id === 'admCoins'){ admSel = '__coins'; coinList = null; coinMsg = null; admRefresh(); return; }
+  if(e.target.id === 'coinMe' && me){ document.getElementById('coinWho').value = me.id; return; }
+  if(e.target.id !== 'coinGo') return;
+  const who = document.getElementById('coinWho').value.trim(), amt = document.getElementById('coinAmt').value, why = document.getElementById('coinWhy').value;
+  try{
+    const d = await admApi('coins', {target: who, amount: amt, reason: why});
+    coinMsg = {ok:true, text:`Готово. Теперь у ${who}: ${d.coins}`}; coinList = null;
+    if(me && d.id === me.id){ me.coins = d.coins; renderAuth(); }
+  }catch(err){ coinMsg = {ok:false, text:err.message}; }
+  admRefresh();
+});
+
 function adminPage(){
   const head = `<h1 class="ph">${IC.admin}Панель</h1>`;
   if(OFFLINE) return head + nores('Страница не найдена.');
+  if(!admToken && me && me.admin && !MIRROR){
+    admSso();
+    return head + '<div class="nores">Вход в панель…</div>';
+  }
   if(!admToken){
     if(admEnabled === false) return head + nores('Панель выключена. Добавь переменную <b>ADMIN_PASSWORD</b> в Railway → Variables.');
     return head + `<div class="bind adm-login">
@@ -1550,6 +1596,7 @@ function adminPage(){
     <div class="adm-side">
       <input id="admQ" type="search" placeholder="Найти или добавить ник" value="${esc(admQ)}" autocomplete="off" spellcheck="false">
       <div id="admList" class="adm-list">${admListHtml()}</div>
+      <button type="button" class="adm-out" id="admCoins">Монетки</button>
       <a class="adm-out" href="#/tournaments" style="text-decoration:none">Турниры</a>
       <button type="button" class="adm-out" id="admBackup">Скачать копию базы</button>
       <button type="button" class="adm-out" id="admOut">Выйти из панели</button>
@@ -1572,6 +1619,7 @@ function admListHtml(){
 }
 
 function admEditHtml(){
+  if(admSel === '__coins') return coinsHtml();
   if(!admSel) return `<div class="adm-hint">Выбери игрока слева — тут можно сменить ник, поставить тир или убрать из топа.</div>`;
   const p = players.find(x => x.name.toLowerCase() === admSel.toLowerCase());
   const name = p ? p.name : admSel;
