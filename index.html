@@ -2347,8 +2347,8 @@ function gamesBody(kind){
     : `<div class="pic"><img src="${API}/api/game/skin/${game.round}.png" alt="Скин игрока" onerror="this.replaceWith(Object.assign(document.createElement('p'),{textContent:'Скин не загрузился, жми «Дальше»'}))"></div><h2>Чей это скин?</h2><p style="color:var(--dim)">+${game.reward} за правильный ответ</p>`;
   return head + tabs + `<div class="gm">${pic}<div class="opts">${opts}</div>
     <div class="res">${gameRes}</div>
-    ${done ? '<button type="button" class="btn1" data-next>Дальше</button>' : ''}
-    <div class="lim">Монетки сегодня ещё за ${game.left} правильных ответов</div></div>`;
+    ${done && game.left > 0 ? '<button type="button" class="btn1" data-next>Дальше</button>' : ''}
+    <div class="lim">Попыток на сегодня: ${game.left} из 20</div></div>`;
 }
 function wireGames(){
   app.querySelectorAll('[data-guess]').forEach(b => b.addEventListener('click', async () => {
@@ -2359,7 +2359,7 @@ function wireGames(){
       const data = await r.json();
       if(!r.ok) throw new Error(data.error);
       game = {...game, done: true, guess, answer: data.answer, left: data.left};
-      gameRes = data.ok ? (data.earned ? `Верно! +${data.earned}` : 'Верно! Монетки на сегодня кончились') : `Мимо. Правильно: ${esc(game.kind === 'tier' ? data.answer : data.nick)}`;
+      gameRes = data.ok ? `Верно! +${data.earned}` : `Мимо. Правильно: ${esc(game.kind === 'tier' ? data.answer : data.nick)}`;
       if(me){ me.coins = data.coins; renderAuth(); }
     }catch(e){ gameRes = esc(e.message || 'Ошибка'); game.done = true; }
     router();
