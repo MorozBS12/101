@@ -1222,7 +1222,7 @@ function mePage(){
     return `<h1 class="ph">Мой профиль</h1>
     <div class="bind">
       <p>Войди через Discord, чтобы привязать свой ник, копить монетки и покупать украшения.</p>
-      <a class="login" style="max-width:260px" href="#/login">${IC.ds}Войти через Discord</a>
+      <a class="login" style="max-width:260px" href="${API}/auth/discord">${IC.ds}Войти через Discord</a>
     </div>`;
   }
 
@@ -1409,7 +1409,7 @@ async function loadMe(){
 
 function renderAuth(){
   if(!me){
-    auth.innerHTML = `<a class="login" href="#/login">${IC.ds}Войти через Discord</a>`;
+    auth.innerHTML = `<a class="login" href="${API}/auth/discord">${IC.ds}Войти через Discord</a>`;
     return;
   }
   auth.innerHTML = `
@@ -2248,12 +2248,9 @@ function loginPage(){
   return `<h1 class="ph">Вход через Discord</h1>
   <div class="lgn">
     ${expired ? '<p style="color:#ff8a8a;font-weight:700">Ссылка устарела или уже использована. Получи новую.</p>' : ''}
-    <ol>
-      <li>Зайди на сервер DiaCart в Discord.</li>
-      <li>Напиши команду <code>/login</code> в любом канале.</li>
-      <li>Нажми кнопку «Войти на сайт» в ответе бота. Её видишь только ты.</li>
-    </ol>
-    <a class="btn1" href="${DISCORD}" target="_blank" rel="noopener">${IC.ds} Открыть Discord</a>
+    <p>Откроется окно Discord: нажми «Авторизовать», и ты сразу вернёшься на сайт.</p>
+    <a class="btn1" href="${API}/auth/discord" style="margin-top:12px">${IC.ds} Войти через Discord</a>
+    <p style="margin-top:22px;color:var(--dim);font-size:14px">Не открывается? Напиши <code>/login</code> на сервере DiaCart - бот пришлёт ссылку для входа.</p>
   </div>`;
 }
 
