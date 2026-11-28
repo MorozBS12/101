@@ -346,50 +346,58 @@ main{flex:1;min-width:0;width:100%;padding:0 var(--gut) 56px}
 
 /* ===== монетки, магазин, игры ===== */
 .gn{background-clip:text;-webkit-background-clip:text;color:transparent!important;-webkit-text-fill-color:transparent}
-.pskinw{position:relative;display:block;width:max-content}
+.pskinw{position:relative;display:block;width:max-content;z-index:2}
 .pskinw>img{height:220px;object-fit:contain;display:block}
 .crown{position:absolute;left:50%;top:-30px;width:64px;transform:translateX(-50%) rotate(-6deg);image-rendering:pixelated;filter:drop-shadow(0 4px 0 rgba(0,0,0,.35));animation:crownBob 3.2s ease-in-out infinite;pointer-events:none}
 .crown.sm{width:22px;top:-12px}
 .headw{position:relative;display:inline-flex;flex-shrink:0}
 @keyframes crownBob{50%{transform:translateX(-50%) rotate(-6deg) translateY(-4px)}}
-.coins{display:inline-flex;align-items:center;gap:6px;font-weight:700;color:#f2c94c}
-.coins i{width:14px;height:14px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff3b0,#f2c94c 45%,#b9831a);box-shadow:inset 0 -2px 0 rgba(0,0,0,.25);flex:none}
-.wal{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:22px;max-width:760px}
-.wal>div{background:var(--slate);border-radius:12px;padding:18px}
-.wal small{display:block;color:var(--dim);font-size:13px;margin-bottom:6px}
-.wal b{font-size:28px;font-weight:800}
-.wal button,.shop-it button,.gm button,.lgn a.btnx{border:0;border-radius:9px;padding:10px 16px;font:inherit;font-weight:700;cursor:pointer;background:#eae6dc;color:#0f1114;margin-top:12px}
-.wal button:disabled,.shop-it button:disabled,.gm button:disabled{opacity:.45;cursor:not-allowed}
-.log{margin-top:18px;max-width:760px}
-.log div{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-top:1px solid var(--line,rgba(255,255,255,.08));font-size:14px}
-.log .pl{color:#7ee08a;font-weight:700}.log .mi{color:#ff8a8a;font-weight:700}
-.shop-h{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-.shop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px;margin:14px 0 30px}
-.shop-it{background:var(--slate);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:8px;border:2px solid transparent}
-.shop-it.on{border-color:var(--dia)}
-.shop-it .pv{height:96px;border-radius:9px;display:grid;place-items:center;background:#0f1418 center/cover no-repeat;font-weight:800;font-size:22px}
-.shop-it .pv img{width:56px;height:56px;image-rendering:pixelated;border-radius:6px}
-.shop-it h3{font-size:15px;margin:0}
-.shop-it .pr{color:var(--dim);font-size:13px}
-.shop-it button{margin-top:auto}
-.shop-it button.sec{background:transparent;color:#eae6dc;box-shadow:inset 0 0 0 2px var(--slate2,rgba(255,255,255,.18))}
-.gtabs{display:flex;gap:8px;margin:18px 0}
-.gtabs a{padding:10px 16px;border-radius:9px;background:var(--slate);font-weight:700}
-.gtabs a.on{background:#eae6dc;color:#0f1114}
-.gm{background:var(--slate);border-radius:14px;padding:22px;max-width:760px;text-align:center}
-.gm .pic{height:220px;display:grid;place-items:center;margin-bottom:10px}
-.gm .pic img{max-height:220px;image-rendering:pixelated}
-.gm h2{font-size:26px;margin:6px 0 4px}
-.gm .opts{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:16px}
-.gm .opts button{margin:0;min-width:72px;background:#0f1114;color:#eae6dc;box-shadow:inset 0 0 0 2px rgba(255,255,255,.12)}
-.gm .opts button.ok{background:#3ddc84;color:#06130b}
-.gm .opts button.bad{background:#ff5d73;color:#1a0408}
-.gm .res{min-height:24px;margin-top:14px;font-weight:700}
-.gm .lim{color:var(--dim);font-size:13px;margin-top:8px}
-.lgn{background:var(--slate);border-radius:14px;padding:24px;max-width:560px;margin-top:22px}
-.lgn ol{margin:12px 0 0 18px;color:var(--dim);line-height:1.9}
-.lgn code{background:#0f1114;padding:2px 7px;border-radius:6px;color:var(--ink)}
-.lgn a.btnx{display:inline-block;background:#5865f2;color:#fff}
+.cn{width:16px;height:16px;image-rendering:pixelated;vertical-align:-3px;flex:none}
+.acc-btn .who .cn,.acc-btn img.cn{width:13px;height:13px;border-radius:0;vertical-align:-2px}
+.coins{display:inline-flex;align-items:center;gap:6px;font-weight:700;font-variant-numeric:tabular-nums}
+.btn1,.btn2{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 18px;border-radius:8px;cursor:pointer;border:0;font-family:'Golos Text',sans-serif;font-size:14.5px;font-weight:600;text-decoration:none;transition:background .15s}
+.btn1{background:var(--ink);color:var(--ground)}.btn1:hover{background:#fff}
+.btn2{background:var(--slate-2);color:var(--ink);box-shadow:inset 0 0 0 1px var(--edge)}.btn2:hover{background:var(--edge)}
+.btn1:disabled,.btn2:disabled{opacity:.45;cursor:not-allowed}
+.me-dc{display:flex;align-items:center;gap:10px;color:var(--dim);font-size:14px;margin-bottom:6px}
+.me-dc img{width:28px;height:28px;border-radius:50%}
+.daily{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-top:14px;padding:14px 18px;border-radius:12px;border:1px solid var(--edge);background:var(--slate)}
+.daily b{font-weight:600}.daily small{display:block;color:var(--dim);font-size:13px;margin-top:2px}
+.shop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin:0 0 8px}
+.shop-it{background:var(--slate);border:1px solid var(--edge);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:10px}
+.shop-it .pv{height:92px;border-radius:8px;display:grid;place-items:center;background:var(--slate-2) center/cover no-repeat;font-family:'Pixelify Sans',system-ui,sans-serif;font-weight:600;font-size:22px;overflow:hidden}
+.shop-it .pv img{width:52px;height:52px;object-fit:contain}
+.shop-it .row2{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.shop-it .row2 b{font-weight:600;font-size:15px}
+.shop-it .on{font-size:12px;color:var(--dim);border:1px solid var(--edge);border-radius:6px;padding:2px 7px}
+.shop-it .btn1,.shop-it .btn2{width:100%;margin-top:auto}
+.wallet{display:flex;align-items:center;gap:28px;flex-wrap:wrap;padding:26px 30px;border-radius:12px;background:radial-gradient(ellipse at 12% 0%,rgba(242,201,76,.14),transparent 60%),var(--slate);margin-top:16px}
+.wallet .big{font-family:'Pixelify Sans',system-ui,sans-serif;font-size:clamp(34px,5vw,48px);font-weight:600;line-height:1}
+.wallet small{display:block;color:var(--dim);font-size:13px;margin-bottom:6px;text-transform:uppercase;letter-spacing:.08em}
+.c3d{width:96px;height:96px;perspective:500px;flex:none}
+.c3d .spin{position:relative;width:100%;height:100%;transform-style:preserve-3d;animation:cspin 4.5s linear infinite}
+.c3d img{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated;backface-visibility:visible}
+.c3d img.e{filter:brightness(.62)}
+@keyframes cspin{to{transform:rotateY(360deg)}}
+@media(prefers-reduced-motion:reduce){.c3d .spin{animation:none;transform:rotateY(-20deg)}}
+.log{margin-top:6px;max-width:760px}
+.log div{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px solid var(--edge);font-size:14.5px}
+.log .pl{color:#7ee08a;font-weight:600}.log .mi{color:#ff8a8a;font-weight:600}
+.gm{background:var(--slate);border-radius:12px;padding:24px;max-width:760px;text-align:center;margin-top:16px}
+.gm .pic{height:220px;display:grid;place-items:center;margin-bottom:6px}
+.gm .pic img{max-height:220px}
+.gm h2{font-family:'Pixelify Sans',system-ui,sans-serif;font-size:28px;font-weight:600;margin:4px 0}
+.gm p{color:var(--dim)}
+.gm .opts{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:16px}
+.gm .opts button{min-width:70px;padding:10px 14px;border-radius:8px;border:0;cursor:pointer;background:var(--slate-2);color:var(--ink);box-shadow:inset 0 0 0 1px var(--edge);font-family:'Golos Text',sans-serif;font-weight:600;font-size:14.5px}
+.gm .opts button:hover:not(:disabled){background:var(--edge)}
+.gm .opts button.ok{background:#2f9e5b;color:#fff;box-shadow:none}
+.gm .opts button.bad{background:#b8404f;color:#fff;box-shadow:none}
+.gm .res{min-height:22px;margin:14px 0 4px;font-weight:600}
+.gm .lim{color:var(--dim);font-size:13px;margin-top:10px}
+.lgn{background:var(--slate);border-radius:12px;padding:24px;max-width:560px;margin-top:16px}
+.lgn ol{margin:10px 0 16px 18px;color:var(--dim);line-height:1.9}
+.lgn code{background:var(--slate-2);padding:2px 7px;border-radius:6px;color:var(--ink)}
 .bind{background:var(--slate);border-radius:12px;padding:24px;margin-top:22px;max-width:560px}
 .bind p{color:var(--dim);font-size:15px;margin-bottom:16px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .bind p b{color:var(--ink)}
@@ -931,6 +939,8 @@ const kitOf = key => KITS.find(k => k.key === key);
 let cosm = {};
 const nmS = n => { const c = cosm[String(n).toLowerCase()]; return c && c.g ? ` class="gn" style="background-image:${c.g}"` : ''; };
 const CROWN = `<svg class="crown" viewBox="0 0 16 11" shape-rendering="crispEdges" aria-hidden="true"><path fill="#8a5a0b" d="M0 3h2v1h1v1h1V3h1V1h1V0h1v1h1v1h1v2h1V3h1v2h1V4h1V3h2v8H0z"/><path fill="#f2c94c" d="M1 4h1v1h1v1h2V4h1V2h1V1h1v1h1v2h1v2h2V5h1V4h1v6H1z"/><path fill="#fff3b0" d="M7 2h1v1H7zM2 5h1v1H2zM13 5h1v1h-1zM1 9h14v1H1z"/><path fill="#5fd8e0" d="M7 6h2v2H7z"/><path fill="#ff5d73" d="M3 7h2v1H3zM11 7h2v1h-2z"/></svg>`;
+const COIN = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAFzUkdCAK7OHOkAAAEUSURBVDiNY2TAAqLMOP5jE1926gcjuhgLNo3xvkLY9DMwMLz7j24QC7JmmEa3gmkMDAwMDJ+vzUEz4BzcIJghLMiacWuEAAUlEQaICxGGMKErwqUZF2BGth1d8/bV5xjuXHvOoKotycDAwMDAK8TP8OXdR4YHD74xWOhxMvz7+rsBwwXImsPyEuBsXABuALLtMM2rJi1AEcNrADpA1owPoBjw/M4jBgYGBgbPUCMMhZ6hRnB5olyAbAiy5gvn36CoY4EkiHf/GRjOweMZmyHoYOHmdwzLTv1gREnKD+4hTJdUkcPwGgwI8CPY8DSNnJQ/fISIGRgiXARzugA/wnYUAxiIyEwLN79jYEDLTBjZk4HE7AwA2md/KbfCWF4AAAAASUVORK5CYII=';
+const coinImg = (cls = 'cn') => `<img class="${cls}" src="${COIN}" alt="">`;
 const topName = () => { const r = sortByPts(players.slice()); return r.length ? r[0].name : ''; };
 const frameStyle = n => { const c = cosm[String(n).toLowerCase()]; return c && c.f ? ` style="outline:3px solid ${c.f};outline-offset:2px;border-radius:6px"` : ''; };
 const pts = p => KITS.reduce((sum, k) => sum + (p.kits[k.key] ? TIER_PTS[p.kits[k.key].tier] || 0 : 0), 0);
@@ -1009,7 +1019,6 @@ function renderMenu(on){
     `<div class="grp">Ещё</div>` +
     li('#/tournaments', 'Турниры', IC.cup) +
     li('#/shop', 'Магазин', IC.shop) +
-    li('#/games', 'Игры', IC.games) +
     li('#/rules', 'Правила', IC.rules) +
     li('#/results', 'Results', IC.results) +
     li('#/team', 'Команда', IC.team) +
@@ -1218,40 +1227,48 @@ function mePage(){
   }
 
   const linked = me.mc ? players.find(p => p.name.toLowerCase() === me.mc.toLowerCase()) : null;
-  const rank = linked ? sortByPts(players.slice()).findIndex(x => x.name === linked.name) + 1 : 0;
-
-  const status = !me.mc
-    ? 'Привяжи ник из Minecraft, чтобы видеть свой тир.'
-    : linked
-      ? `Ник <b>${esc(me.mc)}</b> — ${KITS.filter(k => linked.kits[k.key]).map(k => k.name + ' ' + badge(linked.kits[k.key].tier)).join(' ')}`
-      : `Ник <b>${esc(me.mc)}</b> пока не в тир-листе.`;
-
   const d = me.daily || {};
-  const logRows = (me.log || []).map(l => `<div><span>${esc(l.r)}</span><span class="${l.a > 0 ? 'pl' : 'mi'}">${l.a > 0 ? '+' : ''}${l.a}</span></div>`).join('');
+  const daily = `<div class="daily"><div><b>Вход на сайт${d.streak ? `, серия ${d.streak} дн.` : ''}</b><small>${d.can ? `Сегодня можно забрать ${d.next}, каждый 7-й день подряд вдвое больше` : 'Сегодня уже забрано, приходи завтра'}</small></div>${d.can ? `<button type="button" class="btn1" id="dailyBtn">${coinImg()} Забрать ${d.next}</button>` : `<a class="btn2" href="#/shop">${IC.shop} Магазин</a>`}</div>`;
+  const dc = `<div class="me-dc"><img src="${dcAvatar(me)}" alt="">${esc(me.username)}</div>`;
+  const bind = `<div class="bind">
+      <p>${me.mc && !linked ? `Ник <b>${esc(me.mc)}</b> пока не в тир-листе. Пройди тест, и тир появится здесь.` : 'Привяжи свой ник из Minecraft, чтобы видеть свой тир и ставить фон профиля.'}</p>
+      <div class="rowf">
+        <input id="mcNick" type="text" placeholder="Ник в Minecraft" value="${me.mc ? esc(me.mc) : ''}" autocomplete="off" spellcheck="false" maxlength="16">
+        <button type="button" id="bindBtn">Сохранить</button>
+      </div>
+      <div class="msg" id="bindMsg"></div>
+    </div>`;
+  if(!linked){
+    return `<h1 class="ph">Мой профиль</h1>
+    <div class="profile g5"><div>${dc}<h1>${me.mc ? esc(me.mc) : esc(me.username)}</h1>
+      <div class="facts"><div class="fact"><small>Монетки</small><b class="coins">${coinImg()}${me.coins || 0}</b></div></div></div></div>
+    ${daily}${bind}`;
+  }
+  const rank = sortByPts(players.slice()).findIndex(x => x.name === linked.name) + 1;
+  const top = best(linked) || 'LT5';
+  const th = THEMES[linked.theme] || null;
+  const tiles = KITS.map(k => {
+    const own = linked.kits[k.key];
+    return own
+      ? `<div class="ktile g${tierNum(own.tier)}"><span class="orb">${kitIco(k)}</span><span><b>${k.name}</b><span class="tv">${own.tier}</span> <em>· ${TIER_PTS[own.tier] || 0} очк.</em></span></div>`
+      : `<div class="ktile none"><span class="orb">${kitIco(k)}</span><span><b>${k.name}</b><em>нет тира</em></span></div>`;
+  }).join('');
   return `<h1 class="ph">Мой профиль</h1>
-  <div class="wal">
-    <div><small>Монетки</small><b class="coins"><i style="width:22px;height:22px"></i>${me.coins || 0}</b><br><a href="#/shop" style="color:var(--dia);font-size:14px">Открыть магазин</a></div>
-    <div><small>Вход на сайт${d.streak ? `, серия ${d.streak} дн.` : ''}</small><b>${d.can ? '+' + d.next : 'Получено'}</b><br><button type="button" id="dailyBtn"${d.can ? '' : ' disabled'}>${d.can ? 'Забрать' : 'Приходи завтра'}</button></div>
-    <div><small>Игры</small><b>+5 и +10</b><br><a href="#/games" style="color:var(--dia);font-size:14px">Угадай тир и игрока</a></div>
-  </div>
-  <div class="bind">
-    <p>${status}</p>
-    <div class="rowf">
-      <input id="mcNick" type="text" placeholder="Ник в Minecraft" value="${me.mc ? esc(me.mc) : ''}"
-             autocomplete="off" spellcheck="false" maxlength="16">
-      <button type="button" id="bindBtn">Сохранить</button>
+  <div class="profile g${tierNum(top)}${th ? ' hasbg th-' + th.fx : ''}"${th ? ` style="--pbg:url('${th.bg}')"` : ''}>
+    ${th ? `<span class="pfog" aria-hidden="true"></span><canvas class="pfx" data-fx="${th.fx}" aria-hidden="true"></canvas><span class="pglow" aria-hidden="true"></span>` : ''}
+    <span class="pskinw">${skinImg(linked.name, 'full')}${rank === 1 ? CROWN : ''}</span>
+    <div>
+      ${dc}
+      <h1${nmS(linked.name)}>${esc(linked.name)}</h1>
+      <div class="facts">
+        <div class="fact"><small>Место</small><b>#${rank}</b></div>
+        <div class="fact"><small>Очки</small><b>${pts(linked)}</b></div>
+        <div class="fact"><small>Монетки</small><b class="coins">${coinImg()}${me.coins || 0}</b></div>
+      </div>
+      <div class="ktiers">${tiles}</div>
     </div>
-    <div class="msg" id="bindMsg"></div>
   </div>
-  ${linked ? `<div class="lb">
-    <a href="#/player/${encodeURIComponent(linked.name)}" class="row${rank <= 3 ? ' t' + rank : ''}">
-      <span class="pos">${rank}</span>
-      <span class="who">${skinImg(linked.name)}<b>${esc(linked.name)}</b></span>
-      <span class="reg">${regText(linked.region)}</span>
-      ${kitCells(linked)}
-      ${ptsCell(linked)}
-    </a></div>` : ''}
-  ${logRows ? `<h2 class="sh">Последние монетки</h2><div class="log">${logRows}</div>` : ''}`;
+  ${daily}`;
 }
 
 const fmt = iso => new Date(iso).toLocaleDateString('ru-RU',{day:'numeric',month:'short',year:'numeric'});
@@ -1399,13 +1416,12 @@ function renderAuth(){
   <div class="acc" id="acc">
     <button class="acc-btn" type="button" id="accBtn">
       <img src="${dcAvatar(me)}" alt="">
-      <span class="who"><b>${esc(me.username)}</b><small><span class="coins"><i></i>${me.coins || 0}</span> · ${me.mc ? esc(me.mc) : 'ник не привязан'}</small></span>
+      <span class="who"><b>${esc(me.username)}</b><small><span class="coins">${coinImg()}${me.coins || 0}</span> · ${me.mc ? esc(me.mc) : 'ник не привязан'}</small></span>
       <span class="cv">▲</span>
     </button>
     <div class="menu-pop">
       <a href="#/me"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"/><path d="M5 20a7 7 0 0 1 14 0"/></svg>Мой профиль</a>
-      <a href="#/shop">${IC.shop}Магазин</a>
-      <a href="#/games">${IC.games}Игры</a>
+      <a href="#/shop">${IC.shop}Магазин и игры</a>
       ${me.admin ? `<a href="#/admin">${IC.admin}Панель</a>` : ''}
       <button type="button" id="logout"><svg viewBox="0 0 24 24"><path d="M10 5H5v14h5M15 8l4 4-4 4M19 12H9"/></svg>Выйти</button>
     </div>
@@ -2228,7 +2244,7 @@ function wireTournaments(id){
 // ===== Вход, магазин и игры =====
 function loginPage(){
   const expired = /expired/.test(location.hash);
-  if(me) return `<h1 class="ph">Ты уже вошёл</h1><div class="lgn"><p>Аккаунт: <b>${esc(me.username)}</b>.</p><a class="btnx" href="#/me">Мой профиль</a></div>`;
+  if(me) return `<h1 class="ph">Ты уже вошёл</h1><div class="lgn"><p>Аккаунт: <b>${esc(me.username)}</b>.</p><a class="btn1" href="#/me">Мой профиль</a></div>`;
   return `<h1 class="ph">Вход через Discord</h1>
   <div class="lgn">
     ${expired ? '<p style="color:#ff8a8a;font-weight:700">Ссылка устарела или уже использована. Получи новую.</p>' : ''}
@@ -2237,7 +2253,7 @@ function loginPage(){
       <li>Напиши команду <code>/login</code> в любом канале.</li>
       <li>Нажми кнопку «Войти на сайт» в ответе бота. Её видишь только ты.</li>
     </ol>
-    <a class="btnx" href="${DISCORD}" target="_blank" rel="noopener">Открыть Discord</a>
+    <a class="btn1" href="${DISCORD}" target="_blank" rel="noopener">${IC.ds} Открыть Discord</a>
   </div>`;
 }
 
@@ -2247,27 +2263,43 @@ async function shopLoad(){
   catch(e){ shop = {error: true}; }
   if(location.hash.startsWith('#/shop')) router();
 }
-function shopPage(){
-  if(!shop){ shopLoad(); return '<h1 class="ph">Магазин</h1><div class="nores">Загрузка…</div>'; }
-  if(shop.error) return '<h1 class="ph">Магазин</h1>' + nores('Магазин не загрузился. Обнови страницу.');
-  const u = shop.me, owned = new Set(u ? u.owned : []), eq = u ? u.equipped : {};
-  const myName = (u && u.mc) || 'Твой ник';
+function shopTabs(tab){
+  const t = [['', 'Магазин'], ['games', 'Игры'], ['balance', 'Баланс']];
+  return `<nav class="rtabs">${t.map(([k, n]) => `<a href="#/shop${k ? '/' + k : ''}" class="${k === tab ? 'on' : ''}">${n}</a>`).join('')}</nav>`;
+}
+function shopPage(tab){
+  tab = tab === 'games' || tab === 'balance' ? tab : '';
+  const head = `<h1 class="ph">Магазин</h1>${shopTabs(tab)}`;
+  if(tab === 'games') return head + gamesBody(game && game.kind || 'tier');
+  if(!shop){ shopLoad(); return head + '<div class="nores">Загрузка…</div>'; }
+  if(shop.error) return head + nores('Магазин не загрузился. Обнови страницу.');
+  const u = shop.me;
+  if(tab === 'balance') return head + balanceBody(u);
+  const owned = new Set(u ? u.owned : []), eq = u ? u.equipped : {};
+  const myName = (u && u.mc) || 'Steve';
   const btn = (type, it) => {
-    if(!u) return `<button type="button" onclick="location.hash='#/login'">Войти, чтобы купить</button>`;
-    const k = type + ':' + it.key;
-    if(!owned.has(k)) return `<button type="button" data-buy="${type}" data-key="${it.key}"${u.coins < it.price ? ' disabled' : ''}>Купить</button>`;
-    return eq[type] === it.key ? `<button type="button" class="sec" data-eq="${type}" data-key="">Снять</button>` : `<button type="button" class="sec" data-eq="${type}" data-key="${it.key}">Надеть</button>`;
+    if(!u) return `<a class="btn2" href="#/login">Войти, чтобы купить</a>`;
+    if(!owned.has(type + ':' + it.key)) return `<button type="button" class="btn1" data-buy="${type}" data-key="${it.key}"${u.coins < it.price ? ' disabled' : ''}>Купить за ${it.price}</button>`;
+    return eq[type] === it.key ? `<button type="button" class="btn2" data-eq="${type}" data-key="">Снять</button>` : `<button type="button" class="btn2" data-eq="${type}" data-key="${it.key}">Надеть</button>`;
   };
-  const card = (type, it, pv) => `<div class="shop-it${u && eq[type] === it.key ? ' on' : ''}">${pv}<h3>${esc(it.name)}</h3><span class="pr coins"><i></i>${it.price}</span>${btn(type, it)}</div>`;
+  const card = (type, it, pv) => `<div class="shop-it">${pv}<div class="row2"><b>${esc(it.name)}</b>${u && eq[type] === it.key ? '<span class="on">Надето</span>' : `<span class="coins">${coinImg()}${it.price}</span>`}</div>${btn(type, it)}</div>`;
   const grads = shop.items.gradient.map(it => card('gradient', it, `<div class="pv"><span class="gn" style="background-image:${it.css}">${esc(myName)}</span></div>`)).join('');
   const bgs = shop.items.bg.map(it => card('bg', it, `<div class="pv" style="background-image:url('${(THEMES[it.key] || {}).bg || ''}')"></div>`)).join('');
-  const frames = shop.items.frame.map(it => card('frame', it, `<div class="pv"><img src="${bust(myName === 'Твой ник' ? 'Steve' : myName)}" alt="" style="outline:3px solid ${it.color};outline-offset:2px"></div>`)).join('');
-  return `<div class="shop-h"><h1 class="ph">Магазин</h1>${u ? `<span class="coins" style="font-size:20px"><i style="width:20px;height:20px"></i>${u.coins}</span>` : ''}</div>
-  ${shopMsg ? `<p class="msg" style="margin-top:8px">${esc(shopMsg)}</p>` : ''}
-  <p style="color:var(--dim)">Монетки дают за тесты, турниры, вход на сайт и игры. Купленное видно всем в тир-листе.</p>
+  const frames = shop.items.frame.map(it => card('frame', it, `<div class="pv"><img src="${bust(myName)}" alt="" style="outline:3px solid ${it.color};outline-offset:2px;border-radius:6px"></div>`)).join('');
+  return head + `${shopMsg ? `<div class="msg ok" style="margin:10px 0">${esc(shopMsg)}</div>` : ''}
   <h2 class="sh">Градиент ника</h2><div class="shop-grid">${grads}</div>
   <h2 class="sh">Фон профиля</h2><div class="shop-grid">${bgs}</div>
   <h2 class="sh">Рамка вокруг головы</h2><div class="shop-grid">${frames}</div>`;
+}
+function balanceBody(u){
+  if(!u) return `<div class="lgn"><p>Войди, чтобы копить монетки.</p><a class="btn1" href="#/login">${IC.ds} Войти через Discord</a></div>`;
+  const rows = (u.log || []).map(l => `<div><span>${esc(l.r)}</span><span class="${l.a > 0 ? 'pl' : 'mi'}">${l.a > 0 ? '+' : ''}${l.a}</span></div>`).join('') || '<div><span>Пока пусто</span></div>';
+  const earn = [['Тест', '+5, тир вырос +10'], ['Тестеру за тест', '+5'], ['Еженедельный турнир', '150 / 90 / 50, участие 10'], ['Вход на сайт', '+5, 7-й день +10'], ['Угадай тир', '+5'], ['Угадай игрока', '+10']]
+    .map(([a, b]) => `<div><span>${a}</span><span>${b}</span></div>`).join('');
+  return `<div class="wallet"><div class="c3d"><div class="spin">${[0,1,2,3,4,5].map(i => `<img class="${i && i < 5 ? 'e' : ''}" src="${COIN}" alt="" style="transform:translateZ(${(i - 2.5) * 1.6}px)${i === 5 ? ' rotateY(180deg)' : ''}">`).join('')}</div></div>
+    <div><small>Баланс</small><div class="big">${u.coins}</div></div></div>
+  <h2 class="sh">Как заработать</h2><div class="log">${earn}</div>
+  <h2 class="sh">История</h2><div class="log">${rows}</div>`;
 }
 function wireShop(){
   app.querySelectorAll('[data-buy],[data-eq]').forEach(b => b.addEventListener('click', async () => {
@@ -2282,6 +2314,7 @@ function wireShop(){
     }catch(e){ shopMsg = e.message || 'Не получилось'; }
     router();
   }));
+  wireGames();
 }
 
 let game = null, gameRes = '';
@@ -2293,16 +2326,16 @@ async function gameNew(kind){
     if(!r.ok) throw new Error(data.error);
     game = {kind, ...data};
   }catch(e){ game = {kind, error: e.message}; }
-  if(location.hash.startsWith('#/games')) router();
+  if(location.hash.startsWith('#/shop/games')) router();
 }
-function gamesPage(kind){
+function gamesBody(kind){
   kind = kind === 'skin' ? 'skin' : 'tier';
-  const tabs = `<div class="gtabs"><a href="#/games/tier" class="${kind === 'tier' ? 'on' : ''}">Угадай тир</a><a href="#/games/skin" class="${kind === 'skin' ? 'on' : ''}">Угадай игрока по скину</a></div>`;
-  const head = '<h1 class="ph">Игры</h1>';
-  if(!me) return head + tabs + `<div class="lgn"><p>Войди, чтобы играть и получать монетки: угадал тир +5, угадал игрока +10.</p><a class="btnx" href="#/login">Войти через Discord</a></div>`;
+  const tabs = `<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button type="button" class="${kind === 'tier' ? 'btn1' : 'btn2'}" data-gk="tier">Угадай тир</button><button type="button" class="${kind === 'skin' ? 'btn1' : 'btn2'}" data-gk="skin">Угадай игрока по скину</button></div>`;
+  const head = '';
+  if(!me) return head + tabs + `<div class="lgn"><p>Войди, чтобы играть и получать монетки: угадал тир +5, угадал игрока +10.</p><a class="btn1" href="#/login">Войти через Discord</a></div>`;
   if(!game || game.kind !== kind){ setTimeout(() => gameNew(kind)); return head + tabs + '<div class="gm">Загрузка…</div>'; }
   if(game.loading) return head + tabs + '<div class="gm">Загрузка…</div>';
-  if(game.error) return head + tabs + `<div class="gm"><p>${esc(game.error)}</p><button type="button" data-next>Ещё раз</button></div>`;
+  if(game.error) return head + tabs + `<div class="gm"><p>${esc(game.error)}</p><button type="button" class="btn1" data-next>Ещё раз</button></div>`;
   const done = !!game.done;
   const opts = game.options.map(o => {
     let cls = '';
@@ -2314,7 +2347,7 @@ function gamesPage(kind){
     : `<div class="pic"><img src="${API}/api/game/skin/${game.round}.png" alt="Скин игрока" onerror="this.replaceWith(Object.assign(document.createElement('p'),{textContent:'Скин не загрузился, жми «Дальше»'}))"></div><h2>Чей это скин?</h2><p style="color:var(--dim)">+${game.reward} за правильный ответ</p>`;
   return head + tabs + `<div class="gm">${pic}<div class="opts">${opts}</div>
     <div class="res">${gameRes}</div>
-    ${done ? '<button type="button" data-next>Дальше</button>' : ''}
+    ${done ? '<button type="button" class="btn1" data-next>Дальше</button>' : ''}
     <div class="lim">Монетки сегодня ещё за ${game.left} правильных ответов</div></div>`;
 }
 function wireGames(){
@@ -2332,6 +2365,7 @@ function wireGames(){
     router();
   }));
   app.querySelectorAll('[data-next]').forEach(b => b.addEventListener('click', () => gameNew(game ? game.kind : 'tier')));
+  app.querySelectorAll('[data-gk]').forEach(b => b.addEventListener('click', () => gameNew(b.dataset.gk)));
 }
 
 async function loadCosm(){
@@ -2351,7 +2385,7 @@ function router(){
   if(seg === 'rules')                html = rulesPage(arg);
   else if(seg === 'tournaments')     html = tournamentsPage(decodeURIComponent(arg));
   else if(seg === 'login')           html = loginPage();
-  else if(seg === 'shop')            html = shopPage();
+  else if(seg === 'shop')            html = shopPage(arg);
   else if(!ready)                     html = '<div class="nores">Загрузка тир-листа…</div>';
   else if(loadFailed && seg !== 'me') html = nores('Не удалось загрузить тир-лист. Обнови страницу — если не помогает, возможно, провайдер плохо открывает сайт: попробуй другую сеть или VPN.');
   else if(kit)                        html = tierList(kit);
@@ -2359,7 +2393,7 @@ function router(){
   else if(seg === 'team')             html = teamPage();
   else if(seg === 'admin')            html = adminPage();
   else if(seg === 'me')               html = mePage();
-  else if(seg === 'games')            html = gamesPage(arg);
+  else if(seg === 'games')            { location.replace('#/shop/games'); return; }
   else if(seg === 'player')           html = playerPage(decodeURIComponent(arg));
   else                                html = leaderboard();
 
@@ -2374,7 +2408,6 @@ function router(){
   if(seg === 'admin') wireAdmin();
   if(seg === 'tournaments') wireTournaments(decodeURIComponent(arg));
   if(seg === 'shop') wireShop();
-  if(seg === 'games') wireGames();
 }
 
 // Живой фон профиля: звёзды, частицы-завитки (как эффекты зелий в Minecraft), искры/души и летучие мыши
